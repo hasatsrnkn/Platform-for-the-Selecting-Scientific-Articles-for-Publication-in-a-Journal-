@@ -18,9 +18,14 @@ const MainPageForm = (props) => {
             </Form.Group>
           </Row>
           <Row>
-            <Col className="col-3">
+            <Col className="col-7">
               <Button variant="primary" className="mt-3" type="submit">
                 Log in
+              </Button>
+            </Col>
+            <Col className="col-5">
+              <Button variant="danger" className="mt-3" type="submit">
+                Forgot Password
               </Button>
             </Col>
           </Row>

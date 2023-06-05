@@ -11,8 +11,8 @@ const HomePage = () => {
       }}
     >
       <div
-        className="d-flex justify-content-end me-5 align-items-center"
-        style={{ height: "50vh"}}
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh"}}
       >
         <div className="d-flex align-items-center justify-content-center">
           <Col
@@ -23,7 +23,7 @@ const HomePage = () => {
             }}
           >
             <Row>
-              <h1 className="text-primary">Welcome To TESTXXX Page</h1>
+              <h1 className="text-primary">Welcome to Review Platform</h1>
             </Row>
             <Row className="mt-3">
               <MainPageForm></MainPageForm>
