@@ -1,8 +1,8 @@
 import { Button, Form, Row, Col, Spinner } from "react-bootstrap";
 
-const MainPageForm = (props) => {
+const SignInForm = (props) => {
   return (
-    <div>
+    <div className="">
       <Row>
         <Form>
           <Row>
@@ -17,14 +17,15 @@ const MainPageForm = (props) => {
               <Form.Control name="password" type="password"></Form.Control>
             </Form.Group>
           </Row>
-          <Row>
-            <Col className="col-7">
-              <Button variant="primary" className="mt-3" type="submit">
-                Log in
-              </Button>
-            </Col>
-            <Col className="col-5">
-              <Button variant="danger" className="mt-3" type="submit">
+
+          <Row className="d-flex justify-content-center">
+            <Button variant="success" className="mt-3" type="submit">
+              Log in
+            </Button>
+          </Row>
+          <Row className="d-flex justify-content-center">
+            <Col className="d-flex justify-content-center">
+              <Button variant="light" className="mt-3" type="submit">
                 Forgot Password
               </Button>
             </Col>
@@ -35,4 +36,4 @@ const MainPageForm = (props) => {
   );
 };
 
-export default MainPageForm;
+export default SignInForm;
