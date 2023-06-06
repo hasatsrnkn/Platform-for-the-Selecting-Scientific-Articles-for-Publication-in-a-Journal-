@@ -1,37 +1,42 @@
-import MainPageForm from "../components/MainPage/MainPageForm";
+import SignInForm from "../components/MainPage/SignInForm";
 import bg from "../assets/mainmenubg.jpg";
 import { Col, Row, Container } from "react-bootstrap";
+import SignUpForm from "../components/MainPage/SignUpForm";
 const HomePage = () => {
   return (
-    <div
+    <Col
       style={{
         backgroundImage: `url(${bg.src})`,
-        width: "100vw",
         height: "100vh",
       }}
     >
+      <h1 className="text-white text-center pt-5">Welcome to Review Platform</h1>
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh"}}
+        style={{ height: "70vh" }}
       >
-        <div className="d-flex align-items-center justify-content-center">
-          <Col
-            className="p-4"
+        <div className="p-5">
+          <Row
+            className="p-4 d-flex align-items-center justify-content-center"
             style={{
               backgroundColor: "white",
               borderRadius: "5%",
             }}
           >
             <Row>
-              <h1 className="text-primary">Welcome to Review Platform</h1>
+              <h2 className="text-primary text-center">Sign In</h2>
             </Row>
-            <Row className="mt-3">
-              <MainPageForm></MainPageForm>
+            <Row className="d-flex align-items-center justify-content-center">
+              <SignInForm></SignInForm>
             </Row>
-          </Col>
+            <hr className="mt-3"></hr>
+            <Row className="d-flex align-items-center justify-content-center">
+              <SignUpForm></SignUpForm>
+            </Row>
+          </Row>
         </div>
       </div>
-    </div>
+    </Col>
   );
 };
 
