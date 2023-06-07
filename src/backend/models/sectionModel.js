@@ -9,7 +9,10 @@ const Section = sequelize.define('section', {
         allowNull: false,
         primaryKey: true
     },
-    name: Sequelize.STRING
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
 });
 
 module.exports = Section;
