@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
-const Rewiew = sequelize.define('review', {
+const Review = sequelize.define('review', {
     idReview: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -11,12 +11,11 @@ const Rewiew = sequelize.define('review', {
     },
     topicImportance: Sequelize.INTEGER,
     include: Sequelize.INTEGER,
-    scientficPracticalImpact:Sequelize.INTEGER,
-    scientficContent: Sequelize.INTEGER,
+    scientificPracticalImpact:Sequelize.INTEGER,
+    scientificContent: Sequelize.INTEGER,
     originality: Sequelize.INTEGER,
     literature: Sequelize.INTEGER,
     presentation:Sequelize.INTEGER,
     comment: Sequelize.TEXT
 });
-
-module.exports = Rewiew;
+module.exports = Review;
