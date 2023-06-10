@@ -21,8 +21,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const userRoutes = require("./routes/userRouter");
+const authRouter = require("./routes/authRouter");
 
-app.use("/user", userRoutes);
+app.use("/auth", authRouter);
 
 app.listen(8000);
