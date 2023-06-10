@@ -1,5 +1,5 @@
 import { Button, Form, Row, Col, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_SIGN_UP } from "../../pages/api/api";
 
 const SignUpForm = (props) => {
@@ -9,48 +9,61 @@ const SignUpForm = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const [nameIsEmpty, setNameIsEmpty] = useState(false);
-  const [surnameIsEmpty, setSurnameIsEmpty] = useState(false);
-  const [usernameIsEmpty, setUsernameIsEmpty] = useState(false);
-  const [emailIsEmpty, setEmailIsEmpty] = useState(false);
-  const [passwordIsEmpty, setPasswordIsEmpty] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [nameIsInvalid, setNameIsInvalid] = useState(false);
+  const [surnameIsInvalid, setSurnameIsInvalid] = useState(false);
+  const [usernameIsInvalid, setUsernameIsInvalid] = useState(false);
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
+  const [passwordIsInvalid, setPasswordIsInvalid] = useState(false);
 
   const handleClose = () => {
     setShow(false);
+    setErrorMessage("");
+    setSuccessMessage("");
   };
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    setShow(true);
+    setPasswordIsInvalid(false);
+  };
 
   const nameHandler = (event) => {
     event.preventDefault();
-    setNameIsEmpty(false);
+    setNameIsInvalid(false);
     setName(event.target.value);
   };
 
   const surnameHandler = (event) => {
     event.preventDefault();
-    setSurnameIsEmpty(false);
+    setSurnameIsInvalid(false);
     setSurname(event.target.value);
   };
 
   const usernameHandler = (event) => {
     event.preventDefault();
-    setUsernameIsEmpty(false);
+    setUsernameIsInvalid(false);
     setUsername(event.target.value);
   };
 
   const emailHandler = (event) => {
     event.preventDefault();
-    setEmailIsEmpty(false);
+    setEmailIsInvalid(false);
     setEmail(event.target.value);
   };
 
   const passwordHandler = (event) => {
     event.preventDefault();
-    setPasswordIsEmpty(false);
     setPassword(event.target.value);
   };
+
+  useEffect(() => {
+    if (password.length > 5) {
+      setPasswordIsInvalid(false);
+    }
+  }, [password]);
 
   const signUpHandler = (event) => {
     event.preventDefault();
@@ -59,22 +72,22 @@ const SignUpForm = (props) => {
       surname == "" ||
       username == "" ||
       email == "" ||
-      password == ""
+      password.length < 6
     ) {
       if (name == "") {
-        setNameIsEmpty(true);
+        setNameIsInvalid(true);
       }
       if (surname == "") {
-        setSurnameIsEmpty(true);
+        setSurnameIsInvalid(true);
       }
       if (username == "") {
-        setUsernameIsEmpty(true);
+        setUsernameIsInvalid(true);
       }
       if (email == "") {
-        setEmailIsEmpty(true);
+        setEmailIsInvalid(true);
       }
-      if (password == "") {
-        setPasswordIsEmpty(true);
+      if (password.length < 6) {
+        setPasswordIsInvalid(true);
       }
     } else {
       fetch(API_SIGN_UP, {
@@ -95,7 +108,9 @@ const SignUpForm = (props) => {
             return res.json();
           } else {
             return res.json().then((data) => {
-              let errorMessage = "Authentication failed!";
+              let errorMessage = "Signup failed!";
+              setSuccessMessage("");
+              setErrorMessage(data.message);
               if (data && data.error && data.error.message) {
                 errorMessage = data.error.message;
               }
@@ -106,8 +121,12 @@ const SignUpForm = (props) => {
         })
         .then((data) => {
           // Handle the successful response
-          setShow(false)
           console.log("POST request was successful!", data);
+          setErrorMessage("");
+          setSuccessMessage("Added the account successfully!");
+          setTimeout(() => {
+            setShow(false);
+          }, 2000);
         })
         .catch((error) => {
           // Handle any errors that occurred during the request
@@ -135,56 +154,77 @@ const SignUpForm = (props) => {
             <Form>
               <Row>
                 <Form.Group>
-                  <Form.Label>Name</Form.Label>
+                  <Form.Label>
+                    <strong>Name </strong>
+                    <small>(No empty)</small>
+                  </Form.Label>
                   <Form.Control
-                    name="user_name"
+                    id="name"
+                    name="name"
                     type="text"
                     onChange={nameHandler}
-                    isInvalid={nameIsEmpty}
+                    isInvalid={nameIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Row>
               <Row>
                 <Form.Group>
-                  <Form.Label>Surname</Form.Label>
+                  <Form.Label>
+                    <strong>Surname </strong>
+                    <small>(No empty)</small>
+                  </Form.Label>
                   <Form.Control
-                    name="user_surname"
+                    id="surname"
+                    name="surname"
                     type="text"
                     onChange={surnameHandler}
-                    isInvalid={surnameIsEmpty}
+                    isInvalid={surnameIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Row>
               <Row>
                 <Form.Group>
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label>
+                    <strong>Username </strong>
+                    <small>
+                      (No space between characters and mininum 6 characters)
+                    </small>
+                  </Form.Label>
                   <Form.Control
-                    name="user_username"
+                    id="username"
+                    name="username"
                     type="text"
                     onChange={usernameHandler}
-                    isInvalid={usernameIsEmpty}
+                    isInvalid={emailIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Row>
               <Row>
                 <Form.Group>
-                  <Form.Label>E-mail</Form.Label>
+                  <Form.Label>
+                    <strong>Email </strong> <small>(No empty)</small>
+                  </Form.Label>
                   <Form.Control
-                    name="user_email"
-                    type="text"
+                    id="email"
+                    name="email"
+                    type="email"
                     onChange={emailHandler}
-                    isInvalid={emailIsEmpty}
+                    isInvalid={emailIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Row>
               <Row>
                 <Form.Group>
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>
+                    <strong>Password</strong>{" "}
+                    <small>(Minimum 6 characters)</small>
+                  </Form.Label>
                   <Form.Control
-                    name="user_password"
+                    id="password"
+                    name="password"
                     type="password"
                     onChange={passwordHandler}
-                    isInvalid={passwordIsEmpty}
+                    isInvalid={passwordIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Row>
@@ -205,6 +245,8 @@ const SignUpForm = (props) => {
           </Row>
         </Modal.Body>
         <Modal.Footer>
+          <div className="me-3 text-danger">{errorMessage}</div>
+          <div className="me-3 text-success">{successMessage}</div>
           <Button variant="danger" onClick={handleClose}>
             Close
           </Button>

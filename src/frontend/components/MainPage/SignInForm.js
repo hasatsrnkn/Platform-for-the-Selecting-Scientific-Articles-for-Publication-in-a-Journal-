@@ -14,13 +14,21 @@ const SignInForm = (props) => {
           <Row>
             <Form.Group>
               <Form.Label>Username</Form.Label>
-              <Form.Control name="user_id" type="text"></Form.Control>
+              <Form.Control
+                id="username"
+                name="username"
+                type="text"
+              ></Form.Control>
             </Form.Group>
           </Row>
           <Row>
             <Form.Group>
               <Form.Label>Your Password</Form.Label>
-              <Form.Control name="password" type="password"></Form.Control>
+              <Form.Control
+                id="password"
+                name="password"
+                type="password"
+              ></Form.Control>
             </Form.Group>
           </Row>
 
@@ -53,7 +61,11 @@ const SignInForm = (props) => {
               <Row>
                 <Form.Group>
                   <Form.Label>Your Email</Form.Label>
-                  <Form.Control name="user_name" type="text"></Form.Control>
+                  <Form.Control
+                    id="email"
+                    name="email"
+                    type="email"
+                  ></Form.Control>
                 </Form.Group>
               </Row>
               <Row>
