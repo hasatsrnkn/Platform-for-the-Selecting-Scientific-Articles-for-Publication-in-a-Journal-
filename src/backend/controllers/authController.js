@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
+
 const User = require("../models/userModel");
 
 exports.signUp = (req, res, next) => {
@@ -11,7 +13,7 @@ exports.signUp = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors.array())
+    console.log(errors.array());
     return res.status(422).json({ message: errors.array()[0].msg });
   }
 
@@ -36,4 +38,46 @@ exports.signUp = (req, res, next) => {
         next(err);
       });
   });
+};
+
+exports.login = (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  let loadedUser;
+
+  User.findOne({ where: { username: username } })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "No User Found!" });
+      }
+      loadedUser = user;
+      return bcrypt.compare(password, user.password);
+    })
+    .then((isEqual) => {
+      if (!isEqual) {
+        return res.status(401).json({ message: "Wrong Password!" });
+      }
+      const token = jwt.sign(
+        {
+          username: loadedUser.username,
+          userId: loadedUser.idUser,
+          role: loadedUser.role,
+        },
+        "somesupersecretsecret",
+        { expiresIn: "1h" }
+      );
+      return res
+        .status(200)
+        .json({
+          token: token,
+          userId: loadedUser.idUser.toString(),
+          role: loadedUser.role,
+        });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };

@@ -20,6 +20,8 @@ router.post(
       })
       .normalizeEmail(),
     body("username")
+      .isLength({ min: 5 })
+      .withMessage("Username must be longer than 5 characters")
       .trim()
       .custom((value, { req }) => {
         return User.findOne({ where: { username: value } }).then((userDoc) => {
@@ -34,5 +36,7 @@ router.post(
   ],
   authController.signUp
 );
+
+router.post("/login", authController.login);
 
 module.exports = router;
