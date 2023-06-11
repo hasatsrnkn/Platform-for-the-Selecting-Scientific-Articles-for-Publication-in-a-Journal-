@@ -1,11 +1,14 @@
 import "bootstrap/dist/css/bootstrap.css";
 import SSRProvider from "react-bootstrap/SSRProvider";
-
+import store from "../store";
+import { Provider } from "react-redux";
 function MyApp({ Component, pageProps }) {
   return (
-    <SSRProvider>
-      <Component {...pageProps} />
-    </SSRProvider>
+    <Provider store={store}>
+      <SSRProvider>
+        <Component {...pageProps} />
+      </SSRProvider>
+    </Provider>
   );
 }
 

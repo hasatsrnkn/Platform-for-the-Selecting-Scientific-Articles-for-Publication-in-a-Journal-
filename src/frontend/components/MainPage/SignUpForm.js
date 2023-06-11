@@ -42,16 +42,15 @@ const SignUpForm = (props) => {
     setSurname(event.target.value);
   };
 
-  const usernameHandler = (event) => {
-    event.preventDefault();
-    setUsernameIsInvalid(false);
-    setUsername(event.target.value);
-  };
-
   const emailHandler = (event) => {
     event.preventDefault();
     setEmailIsInvalid(false);
     setEmail(event.target.value);
+  };
+
+  const usernameHandler = (event) => {
+    event.preventDefault();
+    setUsername(event.target.value);
   };
 
   const passwordHandler = (event) => {
@@ -65,13 +64,19 @@ const SignUpForm = (props) => {
     }
   }, [password]);
 
+  useEffect(() => {
+    if (username.length > 5) {
+      setUsernameIsInvalid(false);
+    }
+  }, [username]);
+
   const signUpHandler = (event) => {
     event.preventDefault();
     if (
       name == "" ||
       surname == "" ||
-      username == "" ||
       email == "" ||
+      username.length < 6 ||
       password.length < 6
     ) {
       if (name == "") {
@@ -80,7 +85,7 @@ const SignUpForm = (props) => {
       if (surname == "") {
         setSurnameIsInvalid(true);
       }
-      if (username == "") {
+      if (username.length < 6) {
         setUsernameIsInvalid(true);
       }
       if (email == "") {
@@ -195,7 +200,7 @@ const SignUpForm = (props) => {
                     name="username"
                     type="text"
                     onChange={usernameHandler}
-                    isInvalid={emailIsInvalid}
+                    isInvalid={usernameIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Row>
