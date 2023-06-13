@@ -3,6 +3,7 @@ import bg from "../assets/mainmenubg.jpg";
 import { Col, Row, Container } from "react-bootstrap";
 import SignUpForm from "../components/MainPage/SignUpForm";
 const HomePage = () => {
+  
   return (
     <Col
       style={{
