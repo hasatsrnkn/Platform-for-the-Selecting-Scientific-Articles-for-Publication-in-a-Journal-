@@ -28,14 +28,6 @@ const SignInForm = (props) => {
     setPassword(event.target.value);
   };
 
-  const setAutoLogout = (milliseconds) => {
-    setTimeout(() => {
-      dispatch(authActions.logout());
-      localStorage.removeItem("token");
-      localStorage.removeItem("expiryDate");
-      localStorage.removeItem("userId");
-    }, milliseconds);
-  };
 
   useEffect(() => {
     if (password.length > 5) {
@@ -93,13 +85,13 @@ const SignInForm = (props) => {
           );
           localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data.userId);
+          localStorage.setItem("type", data.role);
           const remainingMilliseconds = 60 * 60 * 1000;
           const expiryDate = new Date(
             new Date().getTime() + remainingMilliseconds
           );
           localStorage.setItem("expiryDate", expiryDate.toISOString());
           dispatch(authActions.setExpiryDate(expiryDate));
-          setAutoLogout(remainingMilliseconds);
           if (!data.role) {
             router.push(`nonrole/` + data.userId);
           } else {

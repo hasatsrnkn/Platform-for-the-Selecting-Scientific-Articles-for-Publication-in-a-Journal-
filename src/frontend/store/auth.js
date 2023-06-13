@@ -15,7 +15,6 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.type = action.payload.type;
       state.userID = action.payload.userID;
-      state.expiryDate = action.payload.userID;
     },
     logout(state) {
       state.isAuthenticated = false;

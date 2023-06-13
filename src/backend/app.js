@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-sequelize.sync({ force: true });
+sequelize.sync();
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

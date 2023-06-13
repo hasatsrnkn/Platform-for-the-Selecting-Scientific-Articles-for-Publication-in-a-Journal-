@@ -66,13 +66,32 @@ exports.login = (req, res, next) => {
         "somesupersecretsecret",
         { expiresIn: "1h" }
       );
-      return res
-        .status(200)
-        .json({
-          token: token,
-          userId: loadedUser.idUser.toString(),
-          role: loadedUser.role,
-        });
+      return res.status(200).json({
+        token: token,
+        userId: loadedUser.idUser.toString(),
+        role: loadedUser.role,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getProfile = (req, res, next) => {
+  const userId = req.params.userId;
+  console.log(userId);
+  User.findByPk(userId)
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Could not find user.");
+        error.statusCode = 404;
+        throw error;
+      }
+      console.log(user);
+      res.status(200).json({ message: "User fetched.", user: user });
     })
     .catch((err) => {
       if (!err.statusCode) {
