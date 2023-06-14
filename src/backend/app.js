@@ -22,7 +22,9 @@ app.use((req, res, next) => {
 });
 
 const authRouter = require("./routes/authRouter");
+const userRouter = require("./routes/userRouter");
 
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
 app.listen(8000);
