@@ -1,17 +1,16 @@
-import ProfileInfo from "../../../components/Profile/ProfileInfo";
-import NavbarMenu from "../../../components/UI/NavbarMenu";
-import { API_PROFILE } from "../../api/api";
+import ProfileInfo from "../../components/Profile/ProfileInfo";
+import NavbarMenu from "../../components/UI/NavbarMenu";
+import { API_PROFILE } from "../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Button, Row, Col } from "react-bootstrap";
-import Link from "next/link";
 
-const SelectionAssistantEditorProfilePage = (props) => {
+const ProfilePage = (props) => {
   const token = useSelector((state) => state.auth.token);
-  const userID = useSelector((state) => state.auth.userID);
-  const [user, setUser] = useState(null);
   const router = useRouter();
+  const userID = router.query.userId;
+  const [user, setUser] = useState(null);
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
 
   useEffect(() => {
@@ -91,17 +90,8 @@ const SelectionAssistantEditorProfilePage = (props) => {
           ></ProfileInfo>
         </Row>
       </Col>
-      <Col className="d-flex align-items-center justify-content-center">
-        <Row>
-          <Link className="" href="/selectionassistanteditor/userslist" passHref legacyBehavior>
-            <Button size="lg" className="mt-4" variant="success">
-              Go To Users List
-            </Button>
-          </Link>
-        </Row>
-      </Col>
     </div>
   );
 };
 
-export default SelectionAssistantEditorProfilePage;
+export default ProfilePage;
