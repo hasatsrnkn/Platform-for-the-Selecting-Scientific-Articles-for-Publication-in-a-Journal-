@@ -23,8 +23,10 @@ app.use((req, res, next) => {
 
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
+const reviewerRouter = require("./routes/reviewerRouter");
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/reviewer", reviewerRouter);
 
 app.listen(8000);
