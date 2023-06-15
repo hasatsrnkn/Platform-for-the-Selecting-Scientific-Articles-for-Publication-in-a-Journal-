@@ -1,5 +1,10 @@
-const User = require("../models/userModel");
-
+const ChiefEditor = require("../models/UserModels/chiefEditorModel");
+const Reviewer = require("../models/UserModels/reviewerModel");
+const SectionEditor = require("../models/UserModels/sectionEditorModel");
+const SelectionAssistantEditor = require("../models/UserModels/selectionAssistantEditorModel");
+const User = require("../models/UserModels/userModel");
+const VicePresident = require("../models/UserModels/vicePresidentModel");
+const Grade = require("../models/gradeModel");
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
     .then((users) => {
@@ -21,7 +26,7 @@ exports.getAllUsers = (req, res, next) => {
 exports.changeUserRole = (req, res, next) => {
   const userId = req.body.userId;
   const role = req.body.role;
-  console.log(role);
+
   User.findOne({ where: { idUser: userId } })
     .then((user) => {
       if (!user) {
@@ -29,8 +34,52 @@ exports.changeUserRole = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      user.update({ role: role });
-      res.status(200).json({ message: "Role updated successfully" }); // Send a JSON response
+      const UserClass = getUserClass(role);
+      if (!UserClass) {
+        const error = new Error("Invalid user type");
+        error.statusCode = 400;
+        throw error;
+      }
+      const currentUserType = getUserClass(user.role);
+      if (!currentUserType) {
+        UserClass.create({ id: userId, idUser: userId })
+          .then(() => {
+            user.update({ role: role });
+            if (role == "reviewer") {
+              Grade.create({
+                id: userId,
+                idUser: userId,
+              });
+            }
+            res.status(200).json({ message: "User role updated successfully" });
+          })
+          .catch((err) => {
+            throw err;
+          });
+      } else {
+        currentUserType
+          .findOne({ where: { idUser: userId } })
+          .then((findedUser) => {
+            findedUser.destroy().then(() => {
+              UserClass.create({ id: userId, idUser: userId })
+                .then(() => {
+                  user.update({ role: role });
+                  if (role == "reviewer") {
+                    Grade.create({
+                      id: userId,
+                      idUser: userId,
+                    });
+                  }
+                  res
+                    .status(200)
+                    .json({ message: "User role updated successfully" });
+                })
+                .catch((err) => {
+                  throw err;
+                });
+            });
+          });
+      }
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -39,3 +88,20 @@ exports.changeUserRole = (req, res, next) => {
       next(err);
     });
 };
+
+function getUserClass(userType) {
+  switch (userType) {
+    case "chiefeditor":
+      return ChiefEditor;
+    case "reviewer":
+      return Reviewer;
+    case "sectioneditor":
+      return SectionEditor;
+    case "selectionassistanteditor":
+      return SelectionAssistantEditor;
+    case "vicepresident":
+      return VicePresident;
+    default:
+      return null;
+  }
+}

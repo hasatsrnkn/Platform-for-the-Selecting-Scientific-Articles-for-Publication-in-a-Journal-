@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-const User = require("../models/userModel");
+const User = require("../models/UserModels/userModel");
 
 exports.signUp = (req, res, next) => {
   const name = req.body.name;
@@ -82,7 +82,6 @@ exports.login = (req, res, next) => {
 
 exports.getProfile = (req, res, next) => {
   const userId = req.params.userId;
-  console.log(userId);
   User.findByPk(userId)
     .then((user) => {
       if (!user) {
@@ -90,7 +89,6 @@ exports.getProfile = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      console.log(user);
       res.status(200).json({ message: "User fetched.", user: user });
     })
     .catch((err) => {
