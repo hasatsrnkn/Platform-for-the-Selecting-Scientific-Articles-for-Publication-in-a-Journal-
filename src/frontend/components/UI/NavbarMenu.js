@@ -33,6 +33,10 @@ const NavbarMenu = (props) => {
               <Nav.Link className="ms-5">Profile</Nav.Link>
             </Link>
 
+            <Link href={`/${userType}/papers/${userID}`} passHref legacyBehavior>
+              <Nav.Link className="ms-5">Papers</Nav.Link>
+            </Link>
+
             <Link href="/" passHref legacyBehavior>
               <Nav.Link className="ms-5" onClick={logoutHandler}>
                 Log out
