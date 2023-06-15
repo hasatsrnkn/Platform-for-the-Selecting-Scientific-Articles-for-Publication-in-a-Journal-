@@ -30,6 +30,8 @@ const User = sequelize.define("user", {
     allowNull: false,
   },
   role: Sequelize.STRING,
+  resetToken: Sequelize.STRING,
+  resetTokenExpiration: Sequelize.DATE,
 });
 
 module.exports = User;

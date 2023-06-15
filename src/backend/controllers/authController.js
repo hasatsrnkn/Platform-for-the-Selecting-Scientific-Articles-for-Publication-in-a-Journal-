@@ -104,21 +104,22 @@ exports.getProfile = (req, res, next) => {
 };
 
 exports.postReset = (req, res, next) => {   // should be called wnen the button "send email" clicked
+  
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log(err);
     }
     const token = buffer.toString('hex');
-    User.findOne({ email: req.body.email })
+    console.log(token);
+    User.findOne({ where: { email: req.body.email } })
       .then(user => {
         if (!user) {
-          req.flash('error', 'No account with that email found.');
+          //req.flash('error', 'No account with that email found.');
         }
-        user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + 3600000;
-        return user.save();
-      })
-      .then(result => {
+        //user.resetToken = token;
+       // user.resetTokenExpiration = Date.now() + 3600000;
+        user.update({resetToken: token, resetTokenExpiration: Date.now() + 3600000});
+        console.log('test');
         res.redirect('/');
         transporter.sendMail({
           to: req.body.email,

@@ -1,6 +1,6 @@
 import { Button, Form, Row, Col, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { API_LOGIN } from "../../pages/api/api";
+import { API_LOGIN, API_RESET_PASSWORD } from "../../pages/api/api";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth";
 import { useRouter } from "next/router";
@@ -11,6 +11,8 @@ const SignInForm = (props) => {
   const [password, setPassword] = useState("");
   const [usernameIsInvalid, setUsernameIsInvalid] = useState(false);
   const [passwordIsInvalid, setPasswordIsInvalid] = useState(false);
+
+  const [resetEmail, setResetEmail ] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -23,11 +25,46 @@ const SignInForm = (props) => {
     setUsername(event.target.value);
   };
 
+  const resetEmailHandler = (event) => {
+    event.preventDefault();
+    setResetEmail(event.target.value);
+  };
+
   const passwordHandler = (event) => {
     event.preventDefault();
     setPassword(event.target.value);
   };
 
+  const submitResetPassword = (event) => {
+    event.preventDefault();
+      fetch(API_RESET_PASSWORD, {
+        method: "POST",
+        body: JSON.stringify({
+          email: resetEmail
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            return res.json().then((data) => {
+              let errorMessage = "Authentication failed!";
+              if (data && data.error && data.error.message) {
+                errorMessage = data.message;
+              }
+              alert(data.message);
+              throw new Error(errorMessage);
+            });
+          }
+        })
+        .catch((err) => {
+          console.error("Error occurred during POST request:", err);
+        });
+
+  }
 
   useEffect(() => {
     if (password.length > 5) {
@@ -172,12 +209,13 @@ const SignInForm = (props) => {
                     id="email"
                     name="email"
                     type="email"
+                    onChange={resetEmailHandler}
                   ></Form.Control>
                 </Form.Group>
               </Row>
               <Row>
                 <Col className="col-8">
-                  <Button variant="success" className="mt-3" type="submit">
+                  <Button variant="success" className="mt-3" type="submit" onClick={submitResetPassword}>
                     Send Email
                   </Button>
                 </Col>
