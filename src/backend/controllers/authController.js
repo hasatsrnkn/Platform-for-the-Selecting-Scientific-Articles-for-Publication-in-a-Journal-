@@ -153,7 +153,7 @@ exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
     .then((user) => {
-      if((!user)) {
+      if (!user) {
         const error = new Error("Could not find user.");
         error.statusCode = 404;
         throw error;
@@ -173,13 +173,21 @@ exports.postNewPassword = (req, res, next) => {
   const userId = req.body.idUser;
   const passwordToken = req.body.passwordToken;
   let resetUser;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json({ message: errors.array()[0].msg });
+  }
 
   User.findOne({
     resetToken: passwordToken,
     resetTokenExpiration: { $gt: Date.now() },
-    idUser: userId,
   })
     .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "No User Found!" });
+      }
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
     })
