@@ -31,10 +31,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('paperFile')); //expects one file
 
-sequelize.sync();
+sequelize.sync( );
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PUT, PATCH, DELETE"

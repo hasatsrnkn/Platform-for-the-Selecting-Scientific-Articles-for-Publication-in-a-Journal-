@@ -12,10 +12,21 @@ const SignInForm = (props) => {
   const [usernameIsInvalid, setUsernameIsInvalid] = useState(false);
   const [passwordIsInvalid, setPasswordIsInvalid] = useState(false);
 
-  const [resetEmail, setResetEmail ] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [resetEmail, setResetEmail] = useState("");
+
+  const handleClose = () => {
+    setShow(false);
+    setErrorMessage("");
+    setSuccessMessage("");
+  };
+  const handleShow = () => {
+    setShow(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+  };
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -37,34 +48,44 @@ const SignInForm = (props) => {
 
   const submitResetPassword = (event) => {
     event.preventDefault();
-      fetch(API_RESET_PASSWORD, {
-        method: "POST",
-        body: JSON.stringify({
-          email: resetEmail
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            return res.json().then((data) => {
-              let errorMessage = "Authentication failed!";
-              if (data && data.error && data.error.message) {
-                errorMessage = data.message;
-              }
-              alert(data.message);
-              throw new Error(errorMessage);
-            });
-          }
-        })
-        .catch((err) => {
-          console.error("Error occurred during POST request:", err);
-        });
+    fetch(API_RESET_PASSWORD, {
+      method: "POST",
+      body: JSON.stringify({
+        email: resetEmail,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = "Authentication failed!";
+            setSuccessMessage("");
+            setErrorMessage(data.message);
+            if (data && data.error && data.error.message) {
+              errorMessage = data.message;
+            }
 
-  }
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        // Handle the successful response
+        console.log("POST request was successful!", data);
+        setErrorMessage("");
+        setSuccessMessage(data.message);
+        setTimeout(() => {
+          setShow(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error("Error occurred during POST request:", err);
+      });
+  };
 
   useEffect(() => {
     if (password.length > 5) {
@@ -215,7 +236,12 @@ const SignInForm = (props) => {
               </Row>
               <Row>
                 <Col className="col-8">
-                  <Button variant="success" className="mt-3" type="submit" onClick={submitResetPassword}>
+                  <Button
+                    variant="success"
+                    className="mt-3"
+                    type="submit"
+                    onClick={submitResetPassword}
+                  >
                     Send Email
                   </Button>
                 </Col>
@@ -224,6 +250,8 @@ const SignInForm = (props) => {
           </Row>
         </Modal.Body>
         <Modal.Footer>
+          <div className="me-3 text-danger">{errorMessage}</div>
+          <div className="me-3 text-success">{successMessage}</div>
           <Button variant="danger" onClick={handleClose}>
             Close
           </Button>
