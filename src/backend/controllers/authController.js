@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
@@ -98,3 +100,89 @@ exports.getProfile = (req, res, next) => {
       next(err);
     });
 };
+
+exports.postReset = (req, res, next) => {   // should be called wnen the button "send email" clicked
+  
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+    }
+    const token = buffer.toString('hex');
+    console.log(token);
+    User.findOne({ where: { email: req.body.email } })
+      .then(user => {
+        if (!user) {
+          //req.flash('error', 'No account with that email found.');
+        }
+        //user.resetToken = token;
+       // user.resetTokenExpiration = Date.now() + 3600000;
+        user.update({resetToken: token, resetTokenExpiration: Date.now() + 3600000});
+        console.log('test');
+        res.redirect('/');
+        transporter.sendMail({
+          to: req.body.email,
+          from: 'Review Platform',
+          subject: 'Password reset',
+          html: `
+            <p>You requested a password reset</p>
+            <p>Click this <a href="http://localhost:3000/${token}">link</a> to set a new password.</p>
+          `
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+};
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'admreviewplatform@gmail.com',
+      pass: 'jntrenqiiloxsiqa',
+  },
+  });
+
+
+  exports.getNewPassword = (req, res, next) => {   // should be followed by the link from the email
+    const token = req.params.token;
+    User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+      .then(user => {
+        return res.status(200).json({
+          userId: user.idUser.toString(),
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+
+  exports.postNewPassword = (req, res, next) => {  // should be called when "reset" button clicked on page "new password"
+    const newPassword = req.body.password; 
+    const userId = req.body.idUser;
+    const passwordToken = req.body.passwordToken;
+    let resetUser;
+  
+    User.findOne({
+      resetToken: passwordToken,
+      resetTokenExpiration: { $gt: Date.now() },
+      idUser: userId
+    })
+      .then(user => {
+        resetUser = user;
+        return bcrypt.hash(newPassword, 12);
+      })
+      .then(hashedPassword => {
+        resetUser.password = hashedPassword;
+        resetUser.resetToken = undefined;
+        resetUser.resetTokenExpiration = undefined;
+        return resetUser.save();
+      })
+      .then(result => {
+        res.redirect('/login');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };

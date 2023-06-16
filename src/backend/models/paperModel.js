@@ -3,6 +3,10 @@ const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
 const Paper = sequelize.define('paper', {
+    idEdition: {
+        type: Sequelize.SMALLINT,
+        primaryKey: true
+    },
     idPaper: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -10,10 +14,20 @@ const Paper = sequelize.define('paper', {
         primaryKey: true
     },
     title: Sequelize.STRING,
-    author: Sequelize.STRING,
-    journal:Sequelize.STRING,
-    doi: Sequelize.BIGINT,  // what is doi?
-    pmid:Sequelize.BIGINT  // what is pmid?
+    doi: Sequelize.STRING,  
+    pmid:Sequelize.BIGINT, 
+    startPage: Sequelize.VARCHAR(15), 
+    endPage: Sequelize.VARCHAR(15),
+    abstract: Sequelize.TEXT,
+    idJournal: {
+        type: Sequelize.INT,
+        allowNull: false,
+    },
+    idJournalIssue: {
+        type: Sequelize.INT,
+        allowNull: false,
+    },
+    paperFilePath: Sequelize.STRING    
 });
 
 module.exports = Paper;
