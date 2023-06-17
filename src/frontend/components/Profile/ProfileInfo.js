@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 const ProfileInfo = (props) => {
   return (
     <Row className="ps-4">
-      <Col className="text-dark">
+      <Col className="text-dark fs-4">
         <Row className="mt-3">Name: {props.name}</Row>
         <Row className="mt-3">Surname: {props.surname}</Row>
         <Row className="mt-3">Username: {props.username}</Row>

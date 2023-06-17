@@ -5,6 +5,7 @@ const SelectionAssistantEditor = require("../models/UserModels/selectionAssistan
 const User = require("../models/UserModels/userModel");
 const VicePresident = require("../models/UserModels/vicePresidentModel");
 const Grade = require("../models/gradeModel");
+const Section = require("../models/sectionModel");
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
     .then((users) => {
@@ -20,6 +21,51 @@ exports.getAllUsers = (req, res, next) => {
         err.statusCode = 500;
       }
       next(err);
+    });
+};
+
+exports.getAllSectionEditors = (req, res, next) => {
+  SectionEditor.findAll({ include: [{ model: Section }, { model: User }] })
+    .then((sectionEditors) => {
+      if (!sectionEditors) {
+        const error = new Error("No section editors");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ users: sectionEditors });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.changeSectionEditorSection = (req, res, next) => {
+  const userId = req.body.userId;
+  const sectionId = req.body.sectionId;
+  SectionEditor.findOne({ where: { idUser: userId } })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("No user");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      if (!sectionId) {
+        const error = new Error("No section");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      user.update({ idSection: sectionId });
+      return res
+        .status(201)
+        .json({ message: "Section is changed successfully!" });
+    })
+    .catch((err) => {
+      throw err;
     });
 };
 
