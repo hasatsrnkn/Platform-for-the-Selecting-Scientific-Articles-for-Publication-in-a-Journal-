@@ -10,7 +10,7 @@ import { API_CHANGE_ROLE } from "../../pages/api/api";
 import { useSelector } from "react-redux";
 
 const UserElement = (props) => {
-  const [newRole, setNewRole] = useState("");
+  const [newRole, setNewRole] = useState();
   const token = useSelector((state) => state.auth.token);
   const [show, setShow] = useState(false);
   const router = useRouter();

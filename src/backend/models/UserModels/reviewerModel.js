@@ -1,7 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../../util/database");
 
-const User = require("./userModel");
 const Grade = require("../gradeModel");
 
 const Reviewer = sequelize.define("reviewer", {
