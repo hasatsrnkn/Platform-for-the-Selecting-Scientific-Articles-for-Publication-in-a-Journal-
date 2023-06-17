@@ -9,6 +9,8 @@ const API_CHANGE_ROLE = `${BASE_URL}user/userrole/`;
 const API_RESET_PASSWORD = `${BASE_URL}auth/post-reset-password`;
 const API_GET_NEW_PASSWORD = `${BASE_URL}auth/get-new-password/`;
 const API_POST_NEW_PASSWORD = `${BASE_URL}auth/post-new-password`;
+const API_ALL_SECTION_EDITORS = `${BASE_URL}user/all-section-editors`;
+const API_CHANGE_SECTION_EDITOR_SECTION = `${BASE_URL}user/section-editor-change-section`;
 
 //REVIEWER
 const API_REVIEWER_GRADE = `${BASE_URL}reviewer/put-grade/`;
@@ -26,4 +28,6 @@ module.exports = {
   API_REVIEWER_GET_GRADES,
   API_GET_NEW_PASSWORD,
   API_POST_NEW_PASSWORD,
+  API_ALL_SECTION_EDITORS,
+  API_CHANGE_SECTION_EDITOR_SECTION,
 };

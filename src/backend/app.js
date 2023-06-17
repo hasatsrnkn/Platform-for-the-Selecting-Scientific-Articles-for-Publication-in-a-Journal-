@@ -3,35 +3,53 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
-const multer = require('multer');
+const multer = require("multer");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'files');
+    cb(null, "files");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + '-' + file.originalname);
-  }
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
 });
 
 const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'file/pdf') {
+  if (file.mimetype === "file/pdf") {
     cb(null, true);
   } else {
     cb(null, false);
   }
 };
 
-
 const app = express();
+
+sequelize
+.authenticate()
+.then(() => {
+    console.log('Connection has been established successfully.');
+})
+.catch(err => {
+    console.error('Unable to connect to the database:', err);
+});
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('paperFile')); //expects one file
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single("paperFile")
+); //expects one file
 
+
+
+const Section = require ( "./models/sectionModel");
+const Paper = require("./models/paperModel");
 sequelize.sync( );
+
+
+Section.sync(); 
+Paper.sync();
+
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");

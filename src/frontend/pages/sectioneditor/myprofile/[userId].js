@@ -4,10 +4,10 @@ import { API_PROFILE } from "../../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Row, ButtonGroup, Col } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 
-const SelectionAssistantEditorProfilePage = (props) => {
+const SectionEditorProfilePage = (props) => {
   const token = useSelector((state) => state.auth.token);
   const userID = useSelector((state) => state.auth.userID);
   const userType = useSelector((state) => state.auth.type);
@@ -80,48 +80,29 @@ const SelectionAssistantEditorProfilePage = (props) => {
   return (
     <div className="overflow-hidden ">
       <NavbarMenu></NavbarMenu>
-      
-        <Col className="d-flex justify-content-center">
-          <Row className="d-flex justify-content-center ">
-            <ProfileInfo
-              name={user.name}
-              surname={user.surname}
-              email={user.email}
-              type={user.type}
-              id={user.id}
-              username={user.username}
-            ></ProfileInfo>
-          </Row>
-        </Col>
-
+      <Col className="d-flex  justify-content-center col-12">
+        <Row className="d-flex justify-content-center ">
+          <ProfileInfo
+            name={user.name}
+            surname={user.surname}
+            email={user.email}
+            type={user.type}
+            id={user.id}
+            username={user.username}
+          ></ProfileInfo>
+        </Row>
+      </Col>
       <Col className="d-flex align-items-center justify-content-center">
         <Row>
-          <ButtonGroup>
-            <Link
-              className=""
-              href="/selectionassistanteditor/userslist"
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4 " variant="info">
-                Go To Users List
-              </Button>
-            </Link>
-            <Link
-              className=""
-              href={`/${userType}/assignsectioneditors/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4" variant="primary">
-                Assign Section Editors
-              </Button>
-            </Link>
-          </ButtonGroup>
+        <Link className=""  href={`/${userType}/uploadpapers/${userID}`} passHref legacyBehavior>
+            <Button size="lg" className="mt-4" variant="success">
+              Upload Papers
+            </Button>
+          </Link>
         </Row>
       </Col>
     </div>
   );
 };
 
-export default SelectionAssistantEditorProfilePage;
+export default SectionEditorProfilePage;
