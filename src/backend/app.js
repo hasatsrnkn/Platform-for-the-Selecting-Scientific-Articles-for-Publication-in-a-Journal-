@@ -44,11 +44,13 @@ app.use(
 
 const Section = require ( "./models/sectionModel");
 const Paper = require("./models/paperModel");
+const Review = require("./models/reviewModel");
 sequelize.sync( );
 
 
 Section.sync(); 
 Paper.sync();
+Review.sync();
 
 
 app.use((req, res, next) => {
