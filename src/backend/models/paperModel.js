@@ -5,7 +5,7 @@ const sequelize = require('../util/database');
 const Paper = sequelize.define('paper', {
     idEdition: {
         type: Sequelize.SMALLINT,
-        primaryKey: true
+        // primaryKey: true
     },
     idPaper: {
         type: Sequelize.INTEGER,
@@ -16,15 +16,15 @@ const Paper = sequelize.define('paper', {
     title: Sequelize.STRING,
     doi: Sequelize.STRING,  
     pmid:Sequelize.BIGINT, 
-    startPage: Sequelize.VARCHAR(15), 
-    endPage: Sequelize.VARCHAR(15),
+    startPage: Sequelize.STRING, 
+    endPage: Sequelize.STRING,
     abstract: Sequelize.TEXT,
     idJournal: {
-        type: Sequelize.INT,
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     idJournalIssue: {
-        type: Sequelize.INT,
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     paperFilePath: Sequelize.STRING    
