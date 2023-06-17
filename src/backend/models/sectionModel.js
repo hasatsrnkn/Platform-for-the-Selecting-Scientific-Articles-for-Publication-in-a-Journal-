@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const sequelize = require("../util/database");
 
 const SectionEditor = require("./UserModels/sectionEditorModel");
-
+const Paper = require("./paperModel");
 const Section = sequelize.define("section", {
   idSection: {
     type: Sequelize.INTEGER,
@@ -27,5 +27,15 @@ SectionEditor.belongsTo(Section, {
   targetKey: "idSection",
 });
 
+Section.hasMany(Paper, {
+  foreignKey: { name: "idSection" },
+  sourceKey: "idSection",
+  primaryKey: true,
+});
+
+Paper.belongsTo(Section, {
+  foreignKey: "idSection",
+  targetKey: "idSection",
+})
 
 module.exports = Section;

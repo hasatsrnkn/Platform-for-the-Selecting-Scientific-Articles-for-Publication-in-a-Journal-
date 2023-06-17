@@ -69,6 +69,40 @@ exports.changeSectionEditorSection = (req, res, next) => {
     });
 };
 
+exports.getSectionId = (req, res, next) => {
+  const userId = req.params.userId;
+  console.log("userId is " + userId);
+  User.findOne({ where: { idUser: userId } })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("No user");
+        error.statusCode = 404;
+        throw error;
+      }
+      const UserClass = getUserClass(user.role);
+      if (!UserClass) {
+        const error = new Error("Invalid user type");
+        error.statusCode = 400;
+        throw error;
+      }
+      UserClass.findOne({ where: { idUser: userId } })
+        .then((foundUser) => {
+          if (!foundUser) {
+            const error = new Error("No user");
+            error.statusCode = 404;
+            throw error;
+          }
+          res.status(200).json({ sectionId: foundUser.idSection });
+        })
+        .catch((err) => {
+          throw err;
+        });
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 exports.changeUserRole = (req, res, next) => {
   const userId = req.body.userId;
   const role = req.body.role;
