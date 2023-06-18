@@ -2,6 +2,8 @@
 because file is a binary not text 
 also he uses this for form for file
 <input type="file" name="paperFile" >*/
+const fs = require('fs');
+const path = require('path');
 
 const Paper = require("../models/paperModel");
 
@@ -45,4 +47,20 @@ exports.postAddPaper = (req, res, next) => {
       }
       next(err);
     });
-};
+
+
+  exports.getPaper = (req, res, next) => {
+    const paperId = req.params.paperId;
+    Paper.findOne({ where: { idPaper: paperId } })
+    .then((paper) => {
+      const paperFilePath = paper.paperFilePath;
+      fs.readFile(paperFilePath, (err, data) => {
+        if (err) {
+          return next(err);
+        }
+        res.setHeader('Content-Type', 'application/pdf');
+        res.send(data);
+      });
+    })
+    
+  };

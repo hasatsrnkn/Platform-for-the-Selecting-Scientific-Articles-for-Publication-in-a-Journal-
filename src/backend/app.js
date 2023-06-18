@@ -8,7 +8,7 @@ const cors = require("cors");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "files");
+    cb(null, "papers");
   },
   filename: (req, file, cb) => {
     cb(null, new Date().toISOString().replace(/:/g, '-') + "-" + file.originalname);
@@ -43,10 +43,13 @@ app.use(
 
 const Section = require("./models/sectionModel");
 const Paper = require("./models/paperModel");
-sequelize.sync();
+
+const Review = require("./models/reviewModel");
+sequelize.sync( );
 
 Section.sync();
 Paper.sync();
+Review.sync();
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
