@@ -1,4 +1,4 @@
-import { Form, Row, Col, Button } from "react-bootstrap";
+import { Form, Row, Col, Button, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { API_POST_PAPER, API_GET_SECTION_ID } from "../../pages/api/api";
 import { useRouter } from "next/router";
@@ -30,7 +30,11 @@ const UploadFileForm = (props) => {
   const [abstractIsInvalid, setAbstractIsInvalid] = useState(false);
   const [fileIsInvalid, setFileIsInvalid] = useState(false);
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
-
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+    router.reload(window.location.pathname);
+  };
   const titleHandler = (event) => {
     setTitle(event.target.value);
     setTitleIsInvalid(false);
@@ -192,8 +196,7 @@ const UploadFileForm = (props) => {
         .then((data) => {
           // Handle the successful response
           console.log("POST request was successful!", data);
-
-          setTimeout(() => {}, 2000);
+          setShow(true);
         })
         .catch((error) => {
           // Handle any errors that occurred during the request
@@ -314,6 +317,21 @@ const UploadFileForm = (props) => {
           Submit
         </Button>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>
+            <Row>You successfully uploaded a file!</Row>
+          </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

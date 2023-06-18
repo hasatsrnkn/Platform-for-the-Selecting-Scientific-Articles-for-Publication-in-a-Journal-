@@ -15,6 +15,9 @@ const API_GET_SECTION_ID =`${BASE_URL}user/get-sectionid/`;
 
 //PAPER
 const API_POST_PAPER = `${BASE_URL}paper/post-paper`;
+const API_GET_ALL_PAPERS = `${BASE_URL}paper/get-all-papers`;
+const API_GET_SECTION_PAPERS = `${BASE_URL}paper/get-section-paper/`;
+const API_GET_PAPER = `${BASE_URL}paper/get-paper/`;
 
 //REVIEWER
 const API_REVIEWER_GRADE = `${BASE_URL}reviewer/put-grade/`;
@@ -36,4 +39,7 @@ module.exports = {
   API_CHANGE_SECTION_EDITOR_SECTION,
   API_POST_PAPER,
   API_GET_SECTION_ID,
+  API_GET_ALL_PAPERS,
+  API_GET_SECTION_PAPERS,
+  API_GET_PAPER,
 };
