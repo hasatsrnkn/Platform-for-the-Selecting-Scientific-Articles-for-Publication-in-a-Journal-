@@ -11,6 +11,10 @@ const API_GET_NEW_PASSWORD = `${BASE_URL}auth/get-new-password/`;
 const API_POST_NEW_PASSWORD = `${BASE_URL}auth/post-new-password`;
 const API_ALL_SECTION_EDITORS = `${BASE_URL}user/all-section-editors`;
 const API_CHANGE_SECTION_EDITOR_SECTION = `${BASE_URL}user/section-editor-change-section`;
+const API_GET_SECTION_ID =`${BASE_URL}user/get-sectionid/`;
+
+//PAPER
+const API_POST_PAPER = `${BASE_URL}paper/post-paper`;
 
 //REVIEWER
 const API_REVIEWER_GRADE = `${BASE_URL}reviewer/put-grade/`;
@@ -30,4 +34,6 @@ module.exports = {
   API_POST_NEW_PASSWORD,
   API_ALL_SECTION_EDITORS,
   API_CHANGE_SECTION_EDITOR_SECTION,
+  API_POST_PAPER,
+  API_GET_SECTION_ID,
 };

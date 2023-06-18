@@ -10,15 +10,18 @@ const Paper = sequelize.define("paper", {
     primaryKey: true,
   },
   title: { type: Sequelize.STRING, allowNull: false },
+  authors: {
+    type: Sequelize.TEXT, allowNull: false
+  },
   doi: Sequelize.STRING,
-  pmid: Sequelize.BIGINT,
+  pmid: Sequelize.STRING,
   abstract: Sequelize.TEXT,
   idJournal: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
   },
   idJournalIssue: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
   },
   paperFilePath: Sequelize.STRING,

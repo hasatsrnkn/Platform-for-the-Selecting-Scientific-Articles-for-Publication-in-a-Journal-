@@ -9,5 +9,6 @@ router.get("/all-users", isAuth, userController.getAllUsers);
 router.put("/userrole", isAuth, userController.changeUserRole );
 router.get("/all-section-editors",isAuth, userController.getAllSectionEditors);
 router.put("/section-editor-change-section", isAuth, userController.changeSectionEditorSection);
+router.get("/get-sectionid/:userId", isAuth, userController.getSectionId);
 
 module.exports = router;
