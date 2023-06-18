@@ -8,7 +8,7 @@ const cors = require("cors");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "papers");
+    cb(null, "files");
   },
   filename: (req, file, cb) => {
     cb(null, new Date().toISOString().replace(/:/g, '-') + "-" + file.originalname);
@@ -45,7 +45,7 @@ const Section = require("./models/sectionModel");
 const Paper = require("./models/paperModel");
 
 const Review = require("./models/reviewModel");
-sequelize.sync( );
+sequelize.sync( {force:true});
 
 Section.sync();
 Paper.sync();
