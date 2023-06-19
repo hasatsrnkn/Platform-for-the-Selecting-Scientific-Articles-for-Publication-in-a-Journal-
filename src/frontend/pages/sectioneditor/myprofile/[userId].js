@@ -52,6 +52,9 @@ const SectionEditorProfilePage = (props) => {
           type: data.user.role,
           username: data.user.username,
           id: data.user.idUser,
+          organizations: data.user.organizations,
+          organizationItems: data.organizationItems,
+          
         });
       } catch (err) {
         alert(err.message);
@@ -80,8 +83,9 @@ const SectionEditorProfilePage = (props) => {
   return (
     <div className="overflow-hidden ">
       <NavbarMenu></NavbarMenu>
-      <Col className="d-flex  justify-content-center col-12">
+      
         <Row className="d-flex justify-content-center ">
+        <Col className="d-flex  justify-content-center">
           <ProfileInfo
             name={user.name}
             surname={user.surname}
@@ -89,9 +93,14 @@ const SectionEditorProfilePage = (props) => {
             type={user.type}
             id={user.id}
             username={user.username}
+            organizations={user.organizations}
+            organizationItems= {user.organizationItems}
+            isAuth={true}
+
           ></ProfileInfo>
+          </Col>
         </Row>
-      </Col>
+      
       <Col className="d-flex align-items-center justify-content-center">
         <Row>
         <Link className=""  href={`/${userType}/uploadpapers/${userID}`} passHref legacyBehavior>

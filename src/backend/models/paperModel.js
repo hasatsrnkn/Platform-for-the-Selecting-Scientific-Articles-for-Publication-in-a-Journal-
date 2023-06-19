@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 
 const sequelize = require("../util/database");
+const Review = require("./reviewModel");
 
 const Paper = sequelize.define("paper", {
   idPaper: {
@@ -11,7 +12,8 @@ const Paper = sequelize.define("paper", {
   },
   title: { type: Sequelize.STRING, allowNull: false },
   authors: {
-    type: Sequelize.TEXT, allowNull: false
+    type: Sequelize.TEXT,
+    allowNull: false,
   },
   doi: Sequelize.STRING,
   pmid: Sequelize.STRING,
@@ -25,6 +27,20 @@ const Paper = sequelize.define("paper", {
     allowNull: false,
   },
   paperFilePath: Sequelize.STRING,
+});
+
+Paper.hasMany(Review, {
+  foreignKey: { name: "idPaper", onDelete: "CASCADE" },
+  sourceKey: "idPaper",
+  primaryKey: true,
+  onDelete: "CASCADE",
+});
+
+Review.belongsTo(Paper, {
+  foreignKey: "idPaper",
+  targetKey: "idPaper",
+  constraints: true,
+  onDelete: "CASCADE",
 });
 
 module.exports = Paper;

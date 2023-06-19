@@ -45,7 +45,7 @@ const Section = require("./models/sectionModel");
 const Paper = require("./models/paperModel");
 
 const Review = require("./models/reviewModel");
-sequelize.sync( {force:true});
+sequelize.sync( );
 
 Section.sync();
 Paper.sync();

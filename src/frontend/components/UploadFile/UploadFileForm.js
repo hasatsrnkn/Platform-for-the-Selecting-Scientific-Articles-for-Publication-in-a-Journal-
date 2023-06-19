@@ -207,131 +207,136 @@ const UploadFileForm = (props) => {
 
   return (
     <div>
-      <Form enctype="multipart/form-data">
-        <Row className="mt-3">
-          <Form.Group>
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              id="title"
-              name="title"
-              type="text"
-              onChange={titleHandler}
-              isInvalid={titleIsInvalid}
-            ></Form.Control>
-          </Form.Group>
-        </Row>
-        <Row className="mt-3">
-          <Form.Group>
-            <Form.Label>Authors</Form.Label>
-            <Form.Control
-              id="authors"
-              name="authors"
-              type="text"
-              onChange={authorsHandler}
-              isInvalid={authorsIsInvalid}
-            ></Form.Control>
-            <Form.Text className="text-muted">
-              Please separate authors by comma ","
-            </Form.Text>
-          </Form.Group>
-        </Row>
-        <Row className="mt-3">
-          <Col className="col-6">
-            <Form.Group>
-              <Form.Label>DOI</Form.Label>
-              <Form.Control
-                id="doi"
-                name="doi"
-                type="text"
-                onChange={doiHandler}
-                isInvalid={doiIsInvalid}
-              ></Form.Control>
-            </Form.Group>
-          </Col>
-          <Col className="col-6">
-            <Form.Group>
-              <Form.Label>PMID</Form.Label>
-              <Form.Control
-                id="pmid"
-                name="pmid"
-                type="text"
-                onChange={pmidHandler}
-                isInvalid={pmidIsInvalid}
-              ></Form.Control>
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row className="mt-3">
-          <Col className="col-6">
-            <Form.Group>
-              <Form.Label>ID Journal</Form.Label>
-              <Form.Control
-                id="idJournal"
-                name="idJournal"
-                type="text"
-                onChange={idJournalHandler}
-                isInvalid={idJournalIsInvalid}
-              ></Form.Control>
-            </Form.Group>
-          </Col>
-          <Col className="col-6">
-            <Form.Group>
-              <Form.Label>ID Journal Issue</Form.Label>
-              <Form.Control
-                id="idJournalIssue"
-                name="idJournalIssue"
-                type="text"
-                onChange={idJournalIssueHandler}
-                isInvalid={idJournalIssueIsInvalid}
-              ></Form.Control>
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row className="mt-3">
-          <Form.Group>
-            <Form.Label>Abstract</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={5}
-              onChange={abstractHandler}
-              isInvalid={abstractIsInvalid}
-            />
-          </Form.Group>
-        </Row>
+      {sectionId && (
+        <div>
+          <Form enctype="multipart/form-data">
+            <Row className="mt-3">
+              <Form.Group>
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  id="title"
+                  name="title"
+                  type="text"
+                  onChange={titleHandler}
+                  isInvalid={titleIsInvalid}
+                ></Form.Control>
+              </Form.Group>
+            </Row>
+            <Row className="mt-3">
+              <Form.Group>
+                <Form.Label>Authors</Form.Label>
+                <Form.Control
+                  id="authors"
+                  name="authors"
+                  type="text"
+                  onChange={authorsHandler}
+                  isInvalid={authorsIsInvalid}
+                ></Form.Control>
+                <Form.Text className="text-muted">
+                  Please separate authors by comma ","
+                </Form.Text>
+              </Form.Group>
+            </Row>
+            <Row className="mt-3">
+              <Col className="col-6">
+                <Form.Group>
+                  <Form.Label>DOI</Form.Label>
+                  <Form.Control
+                    id="doi"
+                    name="doi"
+                    type="text"
+                    onChange={doiHandler}
+                    isInvalid={doiIsInvalid}
+                  ></Form.Control>
+                </Form.Group>
+              </Col>
+              <Col className="col-6">
+                <Form.Group>
+                  <Form.Label>PMID</Form.Label>
+                  <Form.Control
+                    id="pmid"
+                    name="pmid"
+                    type="text"
+                    onChange={pmidHandler}
+                    isInvalid={pmidIsInvalid}
+                  ></Form.Control>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col className="col-6">
+                <Form.Group>
+                  <Form.Label>ID Journal</Form.Label>
+                  <Form.Control
+                    id="idJournal"
+                    name="idJournal"
+                    type="text"
+                    onChange={idJournalHandler}
+                    isInvalid={idJournalIsInvalid}
+                  ></Form.Control>
+                </Form.Group>
+              </Col>
+              <Col className="col-6">
+                <Form.Group>
+                  <Form.Label>ID Journal Issue</Form.Label>
+                  <Form.Control
+                    id="idJournalIssue"
+                    name="idJournalIssue"
+                    type="text"
+                    onChange={idJournalIssueHandler}
+                    isInvalid={idJournalIssueIsInvalid}
+                  ></Form.Control>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Form.Group>
+                <Form.Label>Abstract</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={5}
+                  onChange={abstractHandler}
+                  isInvalid={abstractIsInvalid}
+                />
+              </Form.Group>
+            </Row>
 
-        <Row className="mt-3">
-          <Form.Group controlId="paperFile" className="mb-3">
-            <Form.Label>PDF of the paper</Form.Label>
-            <Form.Control
-              type="file"
-              name="paperFile"
-              accept=".pdf"
-              onChange={fileHandler}
-              isInvalid={fileIsInvalid}
-            />
-          </Form.Group>
-        </Row>
-      </Form>
-      <div className="d-flex justify-content-center align-items-center p-2">
-        <Button size="lg" variant="success" onClick={submitHandler}>
-          Submit
-        </Button>
-      </div>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Success</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h5>
-            <Row>You successfully uploaded a file!</Row>
-          </h5>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            <Row className="mt-3">
+              <Form.Group controlId="paperFile" className="mb-3">
+                <Form.Label>PDF of the paper</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="paperFile"
+                  accept=".pdf"
+                  onChange={fileHandler}
+                  isInvalid={fileIsInvalid}
+                />
+              </Form.Group>
+            </Row>
+          </Form>
+          <div className="d-flex justify-content-center align-items-center p-2">
+            <Button size="lg" variant="success" onClick={submitHandler}>
+              Submit
+            </Button>
+          </div>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Success</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <h5>
+                <Row>You successfully uploaded a file!</Row>
+              </h5>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      )}
+      {!sectionId && (<h2>You are not assigned to any section yet</h2>)}
     </div>
   );
 };
