@@ -16,6 +16,10 @@ const Review = sequelize.define('review', {
     originality: Sequelize.INTEGER,
     literature: Sequelize.INTEGER,
     presentation:Sequelize.INTEGER,
-    comment: Sequelize.TEXT
+    comment: Sequelize.TEXT,
+    fullReview: Sequelize.BOOLEAN,
 });
+
+
+
 module.exports = Review;

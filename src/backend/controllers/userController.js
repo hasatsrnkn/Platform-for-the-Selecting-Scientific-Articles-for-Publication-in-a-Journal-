@@ -6,6 +6,55 @@ const User = require("../models/UserModels/userModel");
 const VicePresident = require("../models/UserModels/vicePresidentModel");
 const Grade = require("../models/gradeModel");
 const Section = require("../models/sectionModel");
+const Organization = require("../models/organizationModel");
+const OrganizationItem = require("../models/organization-item-Model");
+exports.getProfile = (req, res, next) => {
+  const userId = req.params.userId;
+  User.findOne({
+    where: { idUser: userId },
+    include: [{ model: Organization }],
+  })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Could not find user.");
+        error.statusCode = 404;
+        throw error;
+      }
+      OrganizationItem.findAll({ where: { userIdUser: userId } }).then(
+        (organizationItems) => {
+          res.status(200).json({
+            message: "User fetched.",
+            user: user,
+            organizationItems: organizationItems,
+          });
+        }
+      );
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getAllOrganizations = (req, res, next) => {
+  console.log("getting all organizatins");
+  Organization.findAll()
+    .then((organizations) => {
+      if (!organizations) {
+        return res.status(404).json({ message: "No organization found!" });
+      }
+      res.status(200).json({ organizations: organizations });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
     .then((users) => {
@@ -40,6 +89,101 @@ exports.getAllSectionEditors = (req, res, next) => {
       }
       next(err);
     });
+};
+
+exports.changeOrganizationEmails = (req, res, next) => {
+  const userId = req.body.userId;
+  const changedEmails = req.body.changedEmails;
+  changedEmails.forEach((changedEmail) => {
+    const organizationId = changedEmail.organizationId;
+    const newEmail = changedEmail.newEmail;
+
+    OrganizationItem.findOne({
+      where: {
+        userIdUser: userId,
+        organizationIdOrganization: organizationId,
+      },
+    })
+      .then((organizationItem) => {
+        if (!organizationItem) {
+          const error = new Error("Organization item not found.");
+          error.statusCode = 404;
+          throw error;
+        }
+
+        // Update the organization email
+        organizationItem.organizationEmail = newEmail;
+        return organizationItem.save();
+      })
+      .then((updatedOrganizationItem) => {
+        res.status(200).json({
+          message: "Organization email updated successfully.",
+          organizationItem: updatedOrganizationItem,
+        });
+      })
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+      });
+  });
+};
+
+exports.postNewOrganization = (req, res, next) => {
+  const userId = req.body.userId;
+  const organizationName = req.body.organizationName;
+  const organizationCountry = req.body.organizationCountry;
+  const organizationEmail = req.body.organizationEmail;
+
+  Organization.findOne({
+    where: { name: organizationName, country: organizationCountry },
+  }).then((organization) => {
+    if (!organization) {
+      Organization.create({
+        name: organizationName,
+        country: organizationCountry,
+      }).then((newOrganization) => {
+        OrganizationItem.create({
+          organizationEmail: organizationEmail,
+          userIdUser: userId,
+          organizationIdOrganization: newOrganization.idOrganization,
+        })
+          .then((organizationitem) => {
+            console.log("Organization created successfully");
+            return res.status(201).json({
+              message: "Organization created!",
+              organizationItem: organizationitem,
+            });
+          })
+          .catch((err) => {
+            if (!err.statusCode) {
+              err.statusCode = 500;
+            }
+            next(err);
+          });
+      });
+    } else {
+      OrganizationItem.create({
+        organizationEmail: organizationEmail,
+        userIdUser: userId,
+        organizationIdOrganization: organization.idOrganization,
+      })
+        .then((organizationitem) => {
+          console.log("Organization created successfully");
+          return res.status(201).json({
+            message: "Organization created!",
+            organizationItem: organizationitem,
+          });
+        })
+        .catch((err) => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
+        });
+    }
+  });
 };
 
 exports.changeSectionEditorSection = (req, res, next) => {

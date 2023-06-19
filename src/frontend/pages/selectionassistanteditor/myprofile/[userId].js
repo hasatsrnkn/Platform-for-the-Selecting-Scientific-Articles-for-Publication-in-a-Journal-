@@ -52,7 +52,10 @@ const SelectionAssistantEditorProfilePage = (props) => {
           type: data.user.role,
           username: data.user.username,
           id: data.user.idUser,
+          organizations: data.user.organizations,
+          organizationItems: data.organizationItems,
         });
+        console.log(data);
       } catch (err) {
         alert(err.message);
       }
@@ -80,19 +83,22 @@ const SelectionAssistantEditorProfilePage = (props) => {
   return (
     <div className="overflow-hidden ">
       <NavbarMenu></NavbarMenu>
-      
-        <Col className="d-flex justify-content-center">
-          <Row className="d-flex justify-content-center ">
-            <ProfileInfo
-              name={user.name}
-              surname={user.surname}
-              email={user.email}
-              type={user.type}
-              id={user.id}
-              username={user.username}
-            ></ProfileInfo>
-          </Row>
+
+      <Row className="d-flex justify-content-center ">
+        <Col className="d-flex justify-content-center mt-3">
+          <ProfileInfo
+            name={user.name}
+            surname={user.surname}
+            email={user.email}
+            type={user.type}
+            id={user.id}
+            username={user.username}
+            organizations={user.organizations}
+            organizationItems= {user.organizationItems}
+            isAuth={true}
+          ></ProfileInfo>
         </Col>
+      </Row>
 
       <Col className="d-flex align-items-center justify-content-center">
         <Row>

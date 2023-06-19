@@ -38,13 +38,15 @@ router.post(
   authController.signUp
 );
 
-router.post("/login", authController.login);
+router.put("/put-new-password" , isAuth, authController.putPassword);
 
-router.get("/profile/:userId", isAuth, authController.getProfile);
+router.post("/login", authController.login);
 
 router.post("/post-reset-password", authController.postReset);
 
 router.get("/get-new-password/:token", authController.getNewPassword);
+
+router.put("/change-user-information", isAuth, authController.newProfileInformation);
 
 router.post(
   "/post-new-password",

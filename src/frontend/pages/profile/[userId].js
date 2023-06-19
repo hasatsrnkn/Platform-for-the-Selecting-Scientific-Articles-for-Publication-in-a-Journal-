@@ -50,6 +50,8 @@ const ProfilePage = (props) => {
           type: data.user.role,
           username: data.user.username,
           id: data.user.idUser,
+          organizations: data.user.organizations,
+          organizationItems: data.organizationItems,
         });
       } catch (err) {
         alert(err.message);
@@ -78,8 +80,9 @@ const ProfilePage = (props) => {
   return (
     <div className="overflow-hidden ">
       <NavbarMenu></NavbarMenu>
-      <Col className="d-flex  justify-content-center col-12">
+    
         <Row className="d-flex justify-content-center ">
+        <Col className="d-flex  justify-content-center">
           <ProfileInfo
             name={user.name}
             surname={user.surname}
@@ -87,9 +90,13 @@ const ProfilePage = (props) => {
             type={user.type}
             id={user.id}
             username={user.username}
+            organizations={user.organizations}
+            organizationItems= {user.organizationItems}
+            isAuth = {false}
           ></ProfileInfo>
+           </Col>
         </Row>
-      </Col>
+     
     </div>
   );
 };

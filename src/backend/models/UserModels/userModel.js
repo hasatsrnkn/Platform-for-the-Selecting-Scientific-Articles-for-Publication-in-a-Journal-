@@ -4,8 +4,10 @@ const sequelize = require("../../util/database");
 const Reviewer = require("./reviewerModel");
 const ChiefEditor = require("./chiefEditorModel");
 const VicePresident = require("./vicePresidentModel");
-const SelectionAssistantEditor = require("./selectionAssistantEditorModel")
+const SelectionAssistantEditor = require("./selectionAssistantEditorModel");
 const SectionEditor = require("./sectionEditorModel");
+const Organization = require("../organizationModel");
+const OrganizationItem = require("../organization-item-Model");
 
 const User = sequelize.define("user", {
   idUser: {
@@ -39,6 +41,9 @@ const User = sequelize.define("user", {
   resetTokenExpiration: Sequelize.DATE,
 });
 
+User.belongsToMany(Organization, { through: OrganizationItem });
+Organization.belongsToMany(User, { through: OrganizationItem });
+
 User.hasOne(ChiefEditor, {
   foreignKey: { name: "idUser", unique: true },
   sourceKey: "idUser",
@@ -65,7 +70,10 @@ User.hasOne(SelectionAssistantEditor, {
   sourceKey: "idUser",
   primaryKey: true,
 });
-SelectionAssistantEditor.belongsTo(User, { foreignKey: "idUser", targetKey: "idUser" });
+SelectionAssistantEditor.belongsTo(User, {
+  foreignKey: "idUser",
+  targetKey: "idUser",
+});
 
 User.hasOne(VicePresident, {
   foreignKey: { name: "idUser", unique: true },

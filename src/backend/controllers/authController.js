@@ -82,22 +82,75 @@ exports.login = (req, res, next) => {
     });
 };
 
-exports.getProfile = (req, res, next) => {
-  const userId = req.params.userId;
-  User.findByPk(userId)
+exports.newProfileInformation = (req, res, next) => {
+  const userId = req.body.userId;
+  const name = req.body.name;
+  const surname = req.body.surname;
+  const email = req.body.email;
+
+  User.findOne({ where: { idUser: userId } })
     .then((user) => {
       if (!user) {
-        const error = new Error("Could not find user.");
-        error.statusCode = 404;
-        throw error;
+        return res.status(401).json({ message: "No User Found!" });
       }
-      res.status(200).json({ message: "User fetched.", user: user });
+      user.update({
+        name: name,
+        surname: surname,
+        email: email,
+      });
+      return res
+        .status(201)
+        .json({
+          message: "User changed successfully!",
+          userId: user.idUser,
+        });
     })
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
+    });
+};
+
+exports.putPassword = (req, res, next) => {
+  const userId = req.body.userId;
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+
+  User.findOne({ where: { idUser: userId } })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "No User Found!" });
+      }
+      loadedUser = user;
+      return bcrypt.compare(currentPassword, loadedUser.password);
+    })
+    .then((isEqual) => {
+      if (!isEqual) {
+        return res.status(401).json({ message: "Wrong Password!" });
+      }
+      bcrypt.hash(newPassword, 12).then((hashedPassword) => {
+        loadedUser
+          .update({
+            password: hashedPassword,
+          })
+          .then((newPasswordedUser) => {
+            console.log("Password changed successfully");
+            return res
+              .status(201)
+              .json({
+                message: "Password changed successfully!",
+                userId: newPasswordedUser.idUser,
+              });
+          })
+          .catch((err) => {
+            if (!err.statusCode) {
+              err.statusCode = 500;
+            }
+            next(err);
+          });
+      });
     });
 };
 

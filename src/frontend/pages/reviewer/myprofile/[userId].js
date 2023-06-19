@@ -52,6 +52,8 @@ const ReviewerProfilePage = (props) => {
           type: data.user.role,
           username: data.user.username,
           id: data.user.idUser,
+          organizations: data.user.organizations,
+          organizationItems: data.organizationItems,
         });
       } catch (err) {
         alert(err.message);
@@ -80,8 +82,9 @@ const ReviewerProfilePage = (props) => {
   return (
     <div className="overflow-hidden ">
       <NavbarMenu></NavbarMenu>
-      <Col className="d-flex  justify-content-center col-12">
-        <Row className="d-flex justify-content-center ">
+
+      <Row className="d-flex justify-content-center ">
+        <Col className="d-flex  justify-content-center">
           <ProfileInfo
             name={user.name}
             surname={user.surname}
@@ -89,12 +92,21 @@ const ReviewerProfilePage = (props) => {
             type={user.type}
             id={user.id}
             username={user.username}
+            organizations={user.organizations}
+            organizationItems= {user.organizationItems}
+            isAuth={true}
           ></ProfileInfo>
-        </Row>
-      </Col>
+        </Col>
+      </Row>
+
       <Col className="d-flex align-items-center justify-content-center">
         <Row>
-          <Link className=""  href={`/${userType}/gradeskills/${userID}`} passHref legacyBehavior>
+          <Link
+            className=""
+            href={`/${userType}/gradeskills/${userID}`}
+            passHref
+            legacyBehavior
+          >
             <Button size="lg" className="mt-4" variant="success">
               Grade Your Skills
             </Button>

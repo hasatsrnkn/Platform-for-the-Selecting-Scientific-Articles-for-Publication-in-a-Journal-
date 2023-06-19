@@ -2,7 +2,10 @@ const Sequelize = require("sequelize");
 const sequelize = require("../util/database");
 
 const SectionEditor = require("./UserModels/sectionEditorModel");
+
 const Paper = require("./paperModel");
+
+
 const Section = sequelize.define("section", {
   idSection: {
     type: Sequelize.INTEGER,
