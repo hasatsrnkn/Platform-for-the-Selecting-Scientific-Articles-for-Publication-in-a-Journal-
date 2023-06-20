@@ -6,8 +6,9 @@ const User = require("../models/UserModels/userModel");
 const VicePresident = require("../models/UserModels/vicePresidentModel");
 const Grade = require("../models/gradeModel");
 const Section = require("../models/sectionModel");
-const Organization = require("../models/organizationModel");
-const OrganizationItem = require("../models/organization-item-Model");
+const Organization = require("../models/OrganizationModels/organizationModel");
+const OrganizationItem = require("../models/OrganizationModels/organization-item-Model");
+
 exports.getProfile = (req, res, next) => {
   const userId = req.params.userId;
   User.findOne({
@@ -36,6 +37,28 @@ exports.getProfile = (req, res, next) => {
       }
       next(err);
     });
+};
+
+exports.deleteAccount = (req, res, next) => {
+  const userId = req.params.userId;
+  User.findByPk(userId)
+    .then((user) => {
+      if (!user) {
+        const error = new Error("Could not find user.");
+        error.statusCode = 404;
+        throw error;
+      }
+      return user.destroy();
+    })
+    .then((result) => {
+      console.log("DESTROYED USER");
+      res.status(200).json({
+        message: "User deleted.",
+        result: result,
+       
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getAllOrganizations = (req, res, next) => {

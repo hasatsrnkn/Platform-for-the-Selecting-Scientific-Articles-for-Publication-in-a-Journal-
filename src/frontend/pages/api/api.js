@@ -19,6 +19,7 @@ const API_GET_SECTION_ID = `${BASE_URL}user/get-sectionid/`;
 const API_GET_ALL_ORGANIZATIONS = `${BASE_URL}user/get-all-organizations`;
 const API_POST_NEW_ORGANIZATION = `${BASE_URL}user/post-new-organization`;
 const API_UPDATE_EMAILS = `${BASE_URL}user/change-organization-emails`;
+const API_DELETE_ACCOUNT = `${BASE_URL}user/delete-account/`;
 
 //PAPER
 const API_POST_PAPER = `${BASE_URL}paper/post-paper`;
@@ -48,6 +49,7 @@ module.exports = {
   API_GET_ALL_PAPERS,
   API_GET_SECTION_PAPERS,
   API_GET_PAPER,
+  API_DELETE_ACCOUNT,
   API_GET_ALL_ORGANIZATIONS,
   API_POST_NEW_ORGANIZATION,
   API_UPDATE_EMAILS,

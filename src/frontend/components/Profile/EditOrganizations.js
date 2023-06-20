@@ -1,11 +1,14 @@
 import { Col, Row, Button, Modal, Form } from "react-bootstrap";
 import Fab from "@mui/material/Fab";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SchoolIcon from "@mui/icons-material/School";
 import { useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { API_POST_NEW_ORGANIZATION, API_UPDATE_EMAILS } from "../../pages/api/api";
+import {
+  API_POST_NEW_ORGANIZATION,
+  API_UPDATE_EMAILS,
+} from "../../pages/api/api";
 import { useRouter } from "next/router";
 
 const EditOrganizations = (props) => {
@@ -13,7 +16,6 @@ const EditOrganizations = (props) => {
 
   const userID = useSelector((state) => state.auth.userID);
   const token = useSelector((state) => state.auth.token);
-  const userType = useSelector((state) => state.auth.type);
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -194,7 +196,6 @@ const EditOrganizations = (props) => {
                                     id={`email-${organization.idOrganization}`}
                                     name="email"
                                     type="email"
-                            
                                     defaultValue={
                                       organizationItem.organizationEmail
                                     }
@@ -209,14 +210,16 @@ const EditOrganizations = (props) => {
                     </Row>
                   );
                 })}
-                <Button
-                  type="submit"
-                  variant="success"
-                  className="mt-2"
-                  onClick={changeEmailsHandler}
-                >
-                  Submit
-                </Button>
+                {props.organizations.length != 0 && (
+                  <Button
+                    type="submit"
+                    variant="success"
+                    className="mt-2"
+                    onClick={changeEmailsHandler}
+                  >
+                    Submit
+                  </Button>
+                )}
               </Form>
             )}
 
@@ -230,14 +233,17 @@ const EditOrganizations = (props) => {
                     id="add-organization-name"
                     freeSolo
                     onChange={(event, value) => setNewOrganizationName(value)}
-                    options={props.allOrganizations.map(
-                      (organization) => organization.name
+                    options={Array.from(
+                      new Set(
+                        props.allOrganizations.map(
+                          (organization) => organization.name
+                        )
+                      )
                     )}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="Organization"
-                        
                         onChange={({ target }) =>
                           setNewOrganizationName(target.value)
                         }

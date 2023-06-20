@@ -16,6 +16,7 @@ const UserList = (props) => {
           <th>Go To Profile</th>
           <th>New Role</th>
           <th>Submit</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>

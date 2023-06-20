@@ -4,13 +4,12 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import {
-  Card,
   Col,
   Row,
   Button,
   Modal,
   Form,
-  ListGroup,
+ 
 } from "react-bootstrap";
 import {
   API_PUT_NEW_PASSWORD,
