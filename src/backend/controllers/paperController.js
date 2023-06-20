@@ -5,7 +5,7 @@ also he uses this for form for file
 const fs = require("fs");
 const path = require("path");
 
-const Paper = require("../models/paperModel");
+const Paper = require("../models/PaperModels/paperModel");
 const User = require("../models/UserModels/userModel");
 const ChiefEditor = require("../models/UserModels/chiefEditorModel");
 const Reviewer = require("../models/UserModels/reviewerModel");
@@ -74,7 +74,7 @@ exports.getAllPapers = (req, res, next) => {
   Paper.findAll()
     .then((papers) => {
       if (!papers) {
-        const error = new Error("No users");
+        const error = new Error("No papers");
         error.statusCode = 404;
         throw error;
       }

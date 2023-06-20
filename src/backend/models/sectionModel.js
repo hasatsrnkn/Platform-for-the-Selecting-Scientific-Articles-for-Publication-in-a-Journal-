@@ -3,8 +3,8 @@ const sequelize = require("../util/database");
 
 const SectionEditor = require("./UserModels/sectionEditorModel");
 
-const Paper = require("./paperModel");
-
+const Paper = require("./PaperModels/paperModel");
+const Reviewer = require("./UserModels/reviewerModel");
 
 const Section = sequelize.define("section", {
   idSection: {
@@ -17,6 +17,18 @@ const Section = sequelize.define("section", {
     type: Sequelize.TEXT,
     allowNull: false,
   },
+});
+
+
+Section.hasMany(Reviewer, {
+  foreignKey: { name: "idSection" },
+  sourceKey: "idSection",
+  primaryKey: true,
+});
+
+Reviewer.belongsTo(Section, {
+  foreignKey: "idSection",
+  targetKey: "idSection",
 });
 
 Section.hasMany(SectionEditor, {
@@ -39,6 +51,6 @@ Section.hasMany(Paper, {
 Paper.belongsTo(Section, {
   foreignKey: "idSection",
   targetKey: "idSection",
-})
+});
 
 module.exports = Section;
