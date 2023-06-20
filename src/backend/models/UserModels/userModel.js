@@ -8,6 +8,8 @@ const SelectionAssistantEditor = require("./selectionAssistantEditorModel");
 const SectionEditor = require("./sectionEditorModel");
 const Organization = require("../OrganizationModels/organizationModel");
 const OrganizationItem = require("../OrganizationModels/organization-item-Model");
+const Paper = require("../PaperModels/paperModel");
+const PaperItem = require("../PaperModels/paper-item-Model");
 
 const User = sequelize.define("user", {
   idUser: {
@@ -43,6 +45,9 @@ const User = sequelize.define("user", {
 
 User.belongsToMany(Organization, { through: OrganizationItem });
 Organization.belongsToMany(User, { through: OrganizationItem });
+
+User.belongsToMany(Paper, { through: PaperItem });
+Paper.belongsToMany(User, { through: PaperItem });
 
 User.hasOne(ChiefEditor, {
   foreignKey: { name: "idUser", unique: true },

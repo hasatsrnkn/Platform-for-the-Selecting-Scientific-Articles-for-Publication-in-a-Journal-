@@ -42,10 +42,10 @@ app.use(
 ); //expects one file
 
 const Section = require("./models/sectionModel");
-const Paper = require("./models/paperModel");
+const Paper = require("./models/PaperModels/paperModel");
 
 const Review = require("./models/reviewModel");
-sequelize.sync( );
+sequelize.sync({force:true} );
 
 Section.sync();
 Paper.sync();

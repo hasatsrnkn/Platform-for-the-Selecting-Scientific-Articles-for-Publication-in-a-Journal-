@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 
-const sequelize = require("../util/database");
-const Review = require("./reviewModel");
+const sequelize = require("../../util/database");
+const Review = require("../reviewModel");
 
 const Paper = sequelize.define("paper", {
   idPaper: {
