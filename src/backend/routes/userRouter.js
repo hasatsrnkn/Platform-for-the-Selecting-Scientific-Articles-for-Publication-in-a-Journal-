@@ -14,5 +14,6 @@ router.get("/get-sectionid/:userId", isAuth, userController.getSectionId);
 router.get("/get-all-organizations", isAuth, userController.getAllOrganizations);
 router.post("/post-new-organization",isAuth, userController.postNewOrganization);
 router.put("/change-organization-emails", isAuth, userController.changeOrganizationEmails);
+router.post("/delete-account/:userId", isAuth, userController.deleteAccount);
 
 module.exports = router;

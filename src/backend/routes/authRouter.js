@@ -18,8 +18,7 @@ router.post(
             return Promise.reject("E-Mail address already exists!");
           }
         });
-      })
-      .normalizeEmail(),
+      }),
     body("username")
       .isLength({ min: 5 })
       .withMessage("Username must be longer than 5 characters")
@@ -38,15 +37,43 @@ router.post(
   authController.signUp
 );
 
-router.put("/put-new-password" , isAuth, authController.putPassword);
+router.put(
+  "/put-new-password",
+  [
+    body("currentPassword")
+      .isLength({ min: 5 })
+      .withMessage("Password must be longer than 5 characters"),
+    body("newPassword")
+      .isLength({ min: 5 })
+      .withMessage("Password must be longer than 5 characters"),
+  ],
+  isAuth,
+  authController.putPassword
+);
 
-router.post("/login", authController.login);
+router.post(
+  "/login",
+  [
+    body("password")
+      .isLength({ min: 5 })
+      .withMessage("Password must be longer than 5 characters"),
+    body("username")
+      .isLength({ min: 5 })
+      .withMessage("Username must be longer than 5 characters"),
+  ],
+  authController.login
+);
 
 router.post("/post-reset-password", authController.postReset);
 
 router.get("/get-new-password/:token", authController.getNewPassword);
 
-router.put("/change-user-information", isAuth, authController.newProfileInformation);
+router.put(
+  "/change-user-information",
+  [body("email").isEmail().withMessage("Please enter a valid email.")],
+  isAuth,
+  authController.newProfileInformation
+);
 
 router.post(
   "/post-new-password",

@@ -4,6 +4,8 @@ import { API_LOGIN, API_RESET_PASSWORD } from "../../pages/api/api";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth";
 import { useRouter } from "next/router";
+import CircularProgress from "@mui/material/CircularProgress";
+import { LinearProgress, Box } from "@mui/material";
 
 const SignInForm = (props) => {
   const [show, setShow] = useState(false);
@@ -11,7 +13,7 @@ const SignInForm = (props) => {
   const [password, setPassword] = useState("");
   const [usernameIsInvalid, setUsernameIsInvalid] = useState(false);
   const [passwordIsInvalid, setPasswordIsInvalid] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -48,6 +50,7 @@ const SignInForm = (props) => {
 
   const submitResetPassword = (event) => {
     event.preventDefault();
+   
     fetch(API_RESET_PASSWORD, {
       method: "POST",
       body: JSON.stringify({
@@ -101,6 +104,7 @@ const SignInForm = (props) => {
 
   const signInHandler = (event) => {
     event.preventDefault();
+
     if (username.length < 6 || password.length < 6) {
       if (username.length < 6) {
         setUsernameIsInvalid(true);
@@ -109,6 +113,7 @@ const SignInForm = (props) => {
         setPasswordIsInvalid(true);
       }
     } else {
+      setLoading(true);
       fetch(API_LOGIN, {
         method: "POST",
         body: JSON.stringify({
@@ -123,6 +128,7 @@ const SignInForm = (props) => {
           if (res.ok) {
             return res.json();
           } else {
+            setLoading(false);
             return res.json().then((data) => {
               let errorMessage = "Authentication failed!";
               if (data && data.error && data.error.message) {
@@ -159,6 +165,7 @@ const SignInForm = (props) => {
         })
         .catch((err) => {
           console.error("Error occurred during POST request:", err);
+          setLoading(false);
         });
     }
   };
@@ -210,6 +217,13 @@ const SignInForm = (props) => {
             </Col>
           </Row>
         </Form>
+        {loading && (
+          <Row className="d-flex justify-content-center mt-2">
+            <Col className="d-flex justify-content-center">
+              <LinearProgress style={{ width: "90%" }} />
+            </Col>
+          </Row>
+        )}
       </Row>
       <Modal
         show={show}

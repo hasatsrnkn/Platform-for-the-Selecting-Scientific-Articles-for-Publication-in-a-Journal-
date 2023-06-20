@@ -46,6 +46,12 @@ exports.login = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   let loadedUser;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json({ message: errors.array()[0].msg });
+  }
 
   User.findOne({ where: { username: username } })
     .then((user) => {
@@ -88,6 +94,13 @@ exports.newProfileInformation = (req, res, next) => {
   const surname = req.body.surname;
   const email = req.body.email;
 
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json({ message: errors.array()[0].msg });
+  }
+
   User.findOne({ where: { idUser: userId } })
     .then((user) => {
       if (!user) {
@@ -98,12 +111,10 @@ exports.newProfileInformation = (req, res, next) => {
         surname: surname,
         email: email,
       });
-      return res
-        .status(201)
-        .json({
-          message: "User changed successfully!",
-          userId: user.idUser,
-        });
+      return res.status(201).json({
+        message: "User changed successfully!",
+        userId: user.idUser,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -117,6 +128,13 @@ exports.putPassword = (req, res, next) => {
   const userId = req.body.userId;
   const currentPassword = req.body.currentPassword;
   const newPassword = req.body.newPassword;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json({ message: errors.array()[0].msg });
+  }
 
   User.findOne({ where: { idUser: userId } })
     .then((user) => {
@@ -137,12 +155,10 @@ exports.putPassword = (req, res, next) => {
           })
           .then((newPasswordedUser) => {
             console.log("Password changed successfully");
-            return res
-              .status(201)
-              .json({
-                message: "Password changed successfully!",
-                userId: newPasswordedUser.idUser,
-              });
+            return res.status(201).json({
+              message: "Password changed successfully!",
+              userId: newPasswordedUser.idUser,
+            });
           })
           .catch((err) => {
             if (!err.statusCode) {
