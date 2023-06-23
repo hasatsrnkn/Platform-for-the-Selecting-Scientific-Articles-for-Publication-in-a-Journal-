@@ -15,8 +15,8 @@ const UploadFileForm = (props) => {
   const [authors, setAuthors] = useState("");
   const [doi, setDoi] = useState("");
   const [pmid, setPmid] = useState("");
-  const [idJournal, setIdJournal] = useState("");
-  const [idJournalIssue, setIdJournalIssue] = useState("");
+  const [journalName, setJournalName] = useState("");
+  const [journalIssue, setJournalIssue] = useState("");
   const [abstract, setAbstract] = useState("");
   const [file, setFile] = useState(null);
   const [sectionId, setSectionId] = useState("");
@@ -25,8 +25,8 @@ const UploadFileForm = (props) => {
   const [authorsIsInvalid, setAuthorsIsInvalid] = useState(false);
   const [doiIsInvalid, setDoiIsInvalid] = useState(false);
   const [pmidIsInvalid, setPmidIsInvalid] = useState(false);
-  const [idJournalIsInvalid, setIdJournalIsInvalid] = useState(false);
-  const [idJournalIssueIsInvalid, setIdJournalIssueIsInvalid] = useState(false);
+  const [journalNameIsInvalid, setJournalNameIsInvalid] = useState(false);
+  const [journalIssueIsInvalid, setJournalIssueIsInvalid] = useState(false);
   const [abstractIsInvalid, setAbstractIsInvalid] = useState(false);
   const [fileIsInvalid, setFileIsInvalid] = useState(false);
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
@@ -55,14 +55,14 @@ const UploadFileForm = (props) => {
     setPmidIsInvalid(false);
   };
 
-  const idJournalHandler = (event) => {
-    setIdJournal(event.target.value);
-    setIdJournalIsInvalid(false);
+  const journalNameHandler = (event) => {
+    setJournalName(event.target.value);
+    setJournalNameIsInvalid(false);
   };
 
-  const idJournalIssueHandler = (event) => {
-    setIdJournalIssue(event.target.value);
-    setIdJournalIssueIsInvalid(false);
+  const journalIssueHandler = (event) => {
+    setJournalIssue(event.target.value);
+    setJournalIssueIsInvalid(false);
   };
 
   const abstractHandler = (event) => {
@@ -130,8 +130,8 @@ const UploadFileForm = (props) => {
       authors == "" ||
       doi == "" ||
       pmid == "" ||
-      idJournal == "" ||
-      idJournalIssue == "" ||
+      journalName == "" ||
+      journalIssue == "" ||
       abstract == "" ||
       file == null
     ) {
@@ -147,11 +147,11 @@ const UploadFileForm = (props) => {
       if (pmid == "") {
         setPmidIsInvalid(true);
       }
-      if (idJournal == "") {
-        setIdJournalIsInvalid(true);
+      if (journalName == "") {
+        setJournalNameIsInvalid(true);
       }
-      if (idJournalIssue == "") {
-        setIdJournalIssueIsInvalid(true);
+      if (journalIssue == "") {
+        setJournalIssueIsInvalid(true);
       }
       if (abstract == "") {
         setAbstractIsInvalid(true);
@@ -165,8 +165,8 @@ const UploadFileForm = (props) => {
       formData.append("authors", authors);
       formData.append("doi", doi);
       formData.append("pmid", pmid);
-      formData.append("idJournal", idJournal);
-      formData.append("idJournalIssue", idJournalIssue);
+      formData.append("journalName", journalName);
+      formData.append("journalIssue", journalIssue);
       formData.append("abstract", abstract);
       formData.append("paperFile", file);
       formData.append("idSection", sectionId);
@@ -266,25 +266,25 @@ const UploadFileForm = (props) => {
             <Row className="mt-3">
               <Col className="col-6">
                 <Form.Group>
-                  <Form.Label>ID Journal</Form.Label>
+                  <Form.Label>Journal Name</Form.Label>
                   <Form.Control
                     id="idJournal"
                     name="idJournal"
                     type="text"
-                    onChange={idJournalHandler}
-                    isInvalid={idJournalIsInvalid}
+                    onChange={journalNameHandler}
+                    isInvalid={journalNameIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Col>
               <Col className="col-6">
                 <Form.Group>
-                  <Form.Label>ID Journal Issue</Form.Label>
+                  <Form.Label>Journal Issue</Form.Label>
                   <Form.Control
                     id="idJournalIssue"
                     name="idJournalIssue"
                     type="text"
-                    onChange={idJournalIssueHandler}
-                    isInvalid={idJournalIssueIsInvalid}
+                    onChange={journalIssueHandler}
+                    isInvalid={journalIssueIsInvalid}
                   ></Form.Control>
                 </Form.Group>
               </Col>

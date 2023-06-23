@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
 import { Row } from "react-bootstrap";
 import PaperList from "./PaperList";
 
 const SectionPaperList = (props) => {
+
   return (
     <div>
       <Row className="text-center">

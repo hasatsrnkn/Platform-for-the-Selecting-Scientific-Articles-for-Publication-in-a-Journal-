@@ -26,8 +26,8 @@ exports.postAddPaper = (req, res, next) => {
   const doi = req.body.doi;
   const pmid = req.body.pmid;
   const abstract = req.body.abstract;
-  const idJournal = req.body.idJournal;
-  const idJournalIssue = req.body.idJournalIssue;
+  const journalName = req.body.journalName;
+  const journalIssue = req.body.journalIssue;
   const paperFilePath = req.file.path;
   const idSection = req.body.idSection;
   Paper.create({
@@ -36,8 +36,8 @@ exports.postAddPaper = (req, res, next) => {
     doi: doi,
     pmid: pmid,
     abstract: abstract,
-    idJournal: idJournal,
-    idJournalIssue: idJournalIssue,
+    journalName: journalName,
+    journalIssue: journalIssue,
     paperFilePath: paperFilePath,
     idSection: idSection,
   })

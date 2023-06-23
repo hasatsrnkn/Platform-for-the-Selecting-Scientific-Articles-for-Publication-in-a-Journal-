@@ -4,8 +4,8 @@ import { Button, Row, Col } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import PaperList from "../../../components/PaperList/PaperList";
-import { API_GET_ALL_PAPERS, API_GET_SECTION_PAPERS } from "../../api/api";
+import {  API_GET_SECTION_PAPERS } from "../../api/api";
+import ReviewerPaperList from "../../../components/ReviewerPaperList/ReviewerPaperList";
 
 const SectionEditorPapersPage = (props) => {
   const token = useSelector((state) => state.auth.token);
@@ -17,8 +17,7 @@ const SectionEditorPapersPage = (props) => {
 
   useEffect(() => {
     const fetchAllPapers = async () => {
-      console.log(API_GET_SECTION_PAPERS+userID);
-
+      
       if (!token) {
         // Token doesn't exist, handle the error condition
         router.push("/"); // Redirect to the login page or handle the error in a different way
@@ -63,10 +62,9 @@ const SectionEditorPapersPage = (props) => {
   }, [token, userID, tokenLoaded]);
 
   return (
-    <div className="overflow-hidden ">
+    <div className="overflow-hidden">
       <NavbarMenu></NavbarMenu>
-
-      <Row>{papers && <PaperList papers={papers}></PaperList>}</Row>
+      <Row>{papers && <ReviewerPaperList papers={papers}></ReviewerPaperList>}</Row>
     </div>
   );
 };

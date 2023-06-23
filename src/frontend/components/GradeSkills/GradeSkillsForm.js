@@ -107,7 +107,7 @@ const GradeSkillsForm = (props) => {
   
 
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const fetchGradeSkills = async () => {
       console.log(API_REVIEWER_GET_GRADES + userID);
 
       if (!token) {
@@ -227,7 +227,7 @@ const GradeSkillsForm = (props) => {
 
     // If the token is loaded, fetch the profile data
     if (tokenLoaded) {
-      fetchProfileData();
+      fetchGradeSkills();
     }
   }, [token, userID, tokenLoaded]);
 

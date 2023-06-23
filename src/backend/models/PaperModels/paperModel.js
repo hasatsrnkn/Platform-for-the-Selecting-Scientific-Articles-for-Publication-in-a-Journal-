@@ -18,11 +18,11 @@ const Paper = sequelize.define("paper", {
   doi: Sequelize.STRING,
   pmid: Sequelize.STRING,
   abstract: Sequelize.TEXT,
-  idJournal: {
+  journalName: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  idJournalIssue: {
+  journalIssue: {
     type: Sequelize.STRING,
     allowNull: false,
   },

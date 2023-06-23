@@ -26,18 +26,5 @@ Grade.belongsTo(Reviewer, {
   onDelete: "CASCADE",
 });
 
-Reviewer.hasMany(Review, {
-  foreignKey: { name: "idUser", onDelete: "CASCADE" },
-  sourceKey: "id",
-  primaryKey: true,
-  onDelete: "CASCADE",
-});
-
-Review.belongsTo(Reviewer, {
-  foreignKey: "idUser",
-  targetKey: "id",
-  constraints: true,
-  onDelete: "CASCADE",
-});
 
 module.exports = Reviewer;

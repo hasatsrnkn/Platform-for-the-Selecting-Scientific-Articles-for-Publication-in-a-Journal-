@@ -1,18 +1,18 @@
+import ProfileInfo from "../../../components/Profile/ProfileInfo";
+import NavbarMenu from "../../../components/UI/NavbarMenu";
+import { API_PROFILE } from "../../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { Button, Row, ButtonGroup, Col } from "react-bootstrap";
 import Link from "next/link";
-import NavbarMenu from "../../../components/UI/NavbarMenu";
-import { Button, Row, Col, ButtonGroup } from "react-bootstrap";
-import { API_PROFILE } from "../../api/api";
-import ProfileInfo from "../../../components/Profile/ProfileInfo";
 
-const ReviewerProfilePage = (props) => {
+const VicePresidentProfilePage = (props) => {
   const token = useSelector((state) => state.auth.token);
   const userID = useSelector((state) => state.auth.userID);
-  const router = useRouter();
   const userType = useSelector((state) => state.auth.type);
   const [user, setUser] = useState(null);
+  const router = useRouter();
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
 
   useEffect(() => {
@@ -55,6 +55,7 @@ const ReviewerProfilePage = (props) => {
           organizations: data.user.organizations,
           organizationItems: data.organizationItems,
         });
+        console.log(data);
       } catch (err) {
         alert(err.message);
       }
@@ -84,7 +85,7 @@ const ReviewerProfilePage = (props) => {
       <NavbarMenu></NavbarMenu>
 
       <Row className="d-flex justify-content-center ">
-        <Col className="d-flex  justify-content-center mt-3">
+        <Col className="d-flex justify-content-center mt-3">
           <ProfileInfo
             name={user.name}
             surname={user.surname}
@@ -93,40 +94,15 @@ const ReviewerProfilePage = (props) => {
             id={user.id}
             username={user.username}
             organizations={user.organizations}
-            organizationItems={user.organizationItems}
+            organizationItems= {user.organizationItems}
             isAuth={true}
           ></ProfileInfo>
         </Col>
       </Row>
 
-      <Col className="d-flex align-items-center justify-content-center">
-        <Row>
-          <ButtonGroup>
-            <Link
-              className=""
-              href={`/${userType}/gradeskills/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4 " variant="info">
-                Grade Your Skills
-              </Button>
-            </Link>
-            <Link
-              className=""
-              href={`/${userType}/assignedpapers/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4" variant="primary">
-                See Assigned Papers
-              </Button>
-            </Link>
-          </ButtonGroup>
-        </Row>
-      </Col>
+   
     </div>
   );
 };
 
-export default ReviewerProfilePage;
+export default VicePresidentProfilePage;
