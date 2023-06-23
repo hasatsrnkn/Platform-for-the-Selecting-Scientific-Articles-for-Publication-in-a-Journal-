@@ -1,23 +1,20 @@
 import NavbarMenu from "../../../components/UI/NavbarMenu";
-import Link from "next/link";
-import { Button, Row, Col } from "react-bootstrap";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { API_GET_ALL_CHIEF_EDITORS } from "../../api/api";
 import { useSelector } from "react-redux";
-import PaperList from "../../../components/PaperList/PaperList";
-import { API_GET_ALL_PAPERS, API_GET_SECTION_PAPERS } from "../../api/api";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import AssignChiefEditorsForm from "../../../components/AssignChiefEditors/AssignChiefEditorsForm";
 
-const SectionEditorPapersPage = (props) => {
+const AssignChiefEditorsPage = (props) => {
   const token = useSelector((state) => state.auth.token);
   const userID = useSelector((state) => state.auth.userID);
-  const userType = useSelector((state) => state.auth.type);
-  const [papers, setPapers] = useState(null);
-  const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
+  const [users, setUsers] = useState(null);
   const router = useRouter();
+  const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
 
   useEffect(() => {
-    const fetchAllPapers = async () => {
-      console.log(API_GET_SECTION_PAPERS+userID);
+    const fetchProfileData = async () => {
+      console.log(API_GET_ALL_CHIEF_EDITORS);
 
       if (!token) {
         // Token doesn't exist, handle the error condition
@@ -27,7 +24,7 @@ const SectionEditorPapersPage = (props) => {
 
       try {
         console.log(userID);
-        const response = await fetch(API_GET_SECTION_PAPERS + userID, {
+        const response = await fetch(API_GET_ALL_CHIEF_EDITORS, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + token,
@@ -45,7 +42,8 @@ const SectionEditorPapersPage = (props) => {
         }
 
         const data = await response.json();
-        setPapers(data.papers);
+        setUsers(data.users);
+        console.log(data.users);
       } catch (err) {
         alert(err.message);
       }
@@ -58,17 +56,21 @@ const SectionEditorPapersPage = (props) => {
 
     // If the token is loaded, fetch the profile data
     if (tokenLoaded) {
-      fetchAllPapers();
+      fetchProfileData();
     }
   }, [token, userID, tokenLoaded]);
 
-  return (
-    <div className="overflow-hidden ">
-      <NavbarMenu></NavbarMenu>
 
-      <Row>{papers && <PaperList papers={papers}></PaperList>}</Row>
+  return (
+    <div className="overflow-hidden">
+      <NavbarMenu></NavbarMenu>
+      {users && users.length > 0 ? (
+        <AssignChiefEditorsForm users={users} />
+      ) : (
+        <h1>No users</h1>
+      )}
     </div>
   );
 };
 
-export default SectionEditorPapersPage;
+export default AssignChiefEditorsPage;

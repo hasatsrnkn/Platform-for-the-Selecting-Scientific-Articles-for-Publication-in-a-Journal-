@@ -11,11 +11,11 @@ const PaperList = (props) => {
           <th>Authors</th>
           <th>DOI</th>
           <th>PMID</th>
-          <th>idJournal</th>
-          <th>idJournalIssue</th>
+          <th>Journal Name</th>
+          <th>Journal Issue</th>
           <th>See Abstract</th>
           <th>See Reviews</th>
-          <th>Download Paper</th>
+          <th>Download</th>
         </tr>
       </thead>
       <tbody>
@@ -29,8 +29,8 @@ const PaperList = (props) => {
               doi={paper.doi}
               pmid={paper.pmid}
               abstract={paper.abstract}
-              idJournal={paper.idJournal}
-              idJournalIssue={paper.idJournalIssue}
+              journalName={paper.journalName}
+              journalIssue={paper.journalIssue}
             ></PaperElement>
           );
         })}

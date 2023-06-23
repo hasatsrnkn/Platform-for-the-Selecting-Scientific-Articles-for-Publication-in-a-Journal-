@@ -12,14 +12,23 @@ const API_CHANGE_USER_INFO =`${BASE_URL}auth/change-user-information`;
 
 //USER
 const API_PROFILE = `${BASE_URL}user/profile/`;
-const API_CHANGE_ROLE = `${BASE_URL}user/userrole/`;
-const API_ALL_SECTION_EDITORS = `${BASE_URL}user/all-section-editors`;
-const API_CHANGE_SECTION_EDITOR_SECTION = `${BASE_URL}user/section-editor-change-section`;
 const API_GET_SECTION_ID = `${BASE_URL}user/get-sectionid/`;
 const API_GET_ALL_ORGANIZATIONS = `${BASE_URL}user/get-all-organizations`;
 const API_POST_NEW_ORGANIZATION = `${BASE_URL}user/post-new-organization`;
 const API_UPDATE_EMAILS = `${BASE_URL}user/change-organization-emails`;
 const API_DELETE_ACCOUNT = `${BASE_URL}user/delete-account/`;
+const API_GET_ALL_SECTIONS = `${BASE_URL}user/get-all-sections`;
+
+//SELECTION ASSISTANT EDITOR
+const API_ALL_SECTION_EDITORS = `${BASE_URL}sae/all-section-editors`;
+const API_GET_ALL_CHIEF_EDITORS = `${BASE_URL}sae/get-all-chief-editors`;
+const API_GET_ALL_REVIEWERS = `${BASE_URL}sae/get-all-reviewers`;
+const API_CHANGE_SECTION_EDITOR_SECTION = `${BASE_URL}sae/section-editor-change-section`;
+const API_CHANGE_ROLE = `${BASE_URL}sae/userrole/`;
+const API_PUT_CHIEF_EDITOR_SECTION = `${BASE_URL}sae/put-chief-editor`;
+const API_ASSIGN_REVIEWERS_BY_ALGO = `${BASE_URL}sae/assign-reviewers-by-algo`;
+const API_ASSIGN_PAPERS_BY_ALGO = `${BASE_URL}sae/assign-papers-by-algo`;
+
 
 //PAPER
 const API_POST_PAPER = `${BASE_URL}paper/post-paper`;
@@ -30,6 +39,8 @@ const API_GET_PAPER = `${BASE_URL}paper/get-paper/`;
 //REVIEWER
 const API_REVIEWER_GRADE = `${BASE_URL}reviewer/put-grade/`;
 const API_REVIEWER_GET_GRADES = `${BASE_URL}reviewer/get-grade/`;
+const API_REVIEWER_PUT_BID_LEVEL = `${BASE_URL}reviewer/put-bid-level/`;
+const API_REVIEWER_GET_ALL_PAPERITEMS =`${BASE_URL}reviewer/get-paper-items/`;
 
 module.exports = {
   API_SIGN_UP,
@@ -55,4 +66,12 @@ module.exports = {
   API_UPDATE_EMAILS,
   API_PUT_NEW_PASSWORD,
   API_CHANGE_USER_INFO,
+  API_GET_ALL_CHIEF_EDITORS,
+  API_GET_ALL_SECTIONS,
+  API_ASSIGN_REVIEWERS_BY_ALGO,
+  API_PUT_CHIEF_EDITOR_SECTION,
+  API_GET_ALL_REVIEWERS,
+  API_REVIEWER_PUT_BID_LEVEL,
+  API_REVIEWER_GET_ALL_PAPERITEMS,
+  API_ASSIGN_PAPERS_BY_ALGO
 };

@@ -1,10 +1,10 @@
 import ProfileInfo from "../../../components/Profile/ProfileInfo";
 import NavbarMenu from "../../../components/UI/NavbarMenu";
-import { API_PROFILE } from "../../api/api";
+import { API_ASSIGN_REVIEWERS_BY_ALGO, API_PROFILE } from "../../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Row, ButtonGroup, Col } from "react-bootstrap";
+import { Button, Row, ButtonGroup, Col, Modal } from "react-bootstrap";
 import Link from "next/link";
 
 const SelectionAssistantEditorProfilePage = (props) => {
@@ -14,7 +14,12 @@ const SelectionAssistantEditorProfilePage = (props) => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => {
+    setShow(false);
+    router.reload(window.location.pathname);
+  };
   useEffect(() => {
     const fetchProfileData = async () => {
       console.log(API_PROFILE + userID);
@@ -80,8 +85,42 @@ const SelectionAssistantEditorProfilePage = (props) => {
     return <div>Not authenticated</div>; // Show a loading indicator while fetching user data
   }
 
+  const assignAutoHandler = (event) => {
+    console.log("click");
+    event.preventDefault();
+    fetch(API_ASSIGN_REVIEWERS_BY_ALGO, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = "Authentication failed!";
+            if (data && data.error && data.error.message) {
+              errorMessage = data.message;
+            }
+            alert(data.message);
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        // Handle the successful response
+        setShow(true);
+        console.log("PUT request was successful!");
+      })
+      .catch((err) => {
+        console.error("Error occurred during PUT request:", err);
+      });
+  };
+
   return (
-    <div className="overflow-hidden ">
+    <div className="overflow-hidden">
       <NavbarMenu></NavbarMenu>
 
       <Row className="d-flex justify-content-center ">
@@ -94,7 +133,7 @@ const SelectionAssistantEditorProfilePage = (props) => {
             id={user.id}
             username={user.username}
             organizations={user.organizations}
-            organizationItems= {user.organizationItems}
+            organizationItems={user.organizationItems}
             isAuth={true}
           ></ProfileInfo>
         </Col>
@@ -123,9 +162,53 @@ const SelectionAssistantEditorProfilePage = (props) => {
                 Assign Section Editors
               </Button>
             </Link>
+            <Link
+              className=""
+              href={`/${userType}/assignchiefeditors/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="info">
+                Assign Chief Editors
+              </Button>
+            </Link>
+            <Button
+              size="lg"
+              className="mt-4"
+              variant="primary"
+              onClick={assignAutoHandler}
+            >
+              Assign Sections to Reviewers
+            </Button>
+            <Link
+              className=""
+              href={`/${userType}/assignreviewers/papers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="info">
+                Assign Papers to Reviewers
+              </Button>
+            </Link>
           </ButtonGroup>
         </Row>
       </Col>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>
+            <Row>You successfully assigned sections to reviewers!</Row>
+          </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

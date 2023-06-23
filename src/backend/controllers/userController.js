@@ -38,6 +38,7 @@ exports.getProfile = (req, res, next) => {
       next(err);
     });
 };
+ 
 
 exports.deleteAccount = (req, res, next) => {
   const userId = req.params.userId;
@@ -78,6 +79,25 @@ exports.getAllOrganizations = (req, res, next) => {
     });
 };
 
+
+exports.getAllSections = (req, res, next) => {
+  console.log("getting all organizatins");
+  Section.findAll()
+    .then((sections) => {
+      if (!sections) {
+        return res.status(404).json({ message: "No section found!" });
+      }
+      res.status(200).json({ sections: sections });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
     .then((users) => {
@@ -96,23 +116,6 @@ exports.getAllUsers = (req, res, next) => {
     });
 };
 
-exports.getAllSectionEditors = (req, res, next) => {
-  SectionEditor.findAll({ include: [{ model: Section }, { model: User }] })
-    .then((sectionEditors) => {
-      if (!sectionEditors) {
-        const error = new Error("No section editors");
-        error.statusCode = 404;
-        throw error;
-      }
-      res.status(200).json({ users: sectionEditors });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
-};
 
 exports.changeOrganizationEmails = (req, res, next) => {
   const userId = req.body.userId;
@@ -209,32 +212,6 @@ exports.postNewOrganization = (req, res, next) => {
   });
 };
 
-exports.changeSectionEditorSection = (req, res, next) => {
-  const userId = req.body.userId;
-  const sectionId = req.body.sectionId;
-  SectionEditor.findOne({ where: { idUser: userId } })
-    .then((user) => {
-      if (!user) {
-        const error = new Error("No user");
-        error.statusCode = 404;
-        throw error;
-      }
-
-      if (!sectionId) {
-        const error = new Error("No section");
-        error.statusCode = 404;
-        throw error;
-      }
-
-      user.update({ idSection: sectionId });
-      return res
-        .status(201)
-        .json({ message: "Section is changed successfully!" });
-    })
-    .catch((err) => {
-      throw err;
-    });
-};
 
 exports.getSectionId = (req, res, next) => {
   const userId = req.params.userId;
@@ -270,71 +247,6 @@ exports.getSectionId = (req, res, next) => {
     });
 };
 
-exports.changeUserRole = (req, res, next) => {
-  const userId = req.body.userId;
-  const role = req.body.role;
-
-  User.findOne({ where: { idUser: userId } })
-    .then((user) => {
-      if (!user) {
-        const error = new Error("No user");
-        error.statusCode = 404;
-        throw error;
-      }
-      const UserClass = getUserClass(role);
-      if (!UserClass) {
-        const error = new Error("Invalid user type");
-        error.statusCode = 400;
-        throw error;
-      }
-      const currentUserType = getUserClass(user.role);
-      if (!currentUserType) {
-        UserClass.create({ id: userId, idUser: userId })
-          .then(() => {
-            user.update({ role: role });
-            if (role == "reviewer") {
-              Grade.create({
-                id: userId,
-                idUser: userId,
-              });
-            }
-            res.status(200).json({ message: "User role updated successfully" });
-          })
-          .catch((err) => {
-            throw err;
-          });
-      } else {
-        currentUserType
-          .findOne({ where: { idUser: userId } })
-          .then((findedUser) => {
-            findedUser.destroy().then(() => {
-              UserClass.create({ id: userId, idUser: userId })
-                .then(() => {
-                  user.update({ role: role });
-                  if (role == "reviewer") {
-                    Grade.create({
-                      id: userId,
-                      idUser: userId,
-                    });
-                  }
-                  res
-                    .status(200)
-                    .json({ message: "User role updated successfully" });
-                })
-                .catch((err) => {
-                  throw err;
-                });
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
-};
 
 function getUserClass(userType) {
   switch (userType) {

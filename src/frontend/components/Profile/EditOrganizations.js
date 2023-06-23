@@ -243,6 +243,7 @@ const EditOrganizations = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        required
                         label="Organization"
                         onChange={({ target }) =>
                           setNewOrganizationName(target.value)
@@ -255,6 +256,7 @@ const EditOrganizations = (props) => {
                   <Autocomplete
                     id="add-organization-country"
                     freeSolo
+                    
                     options={Array.from(
                       new Set(
                         props.allOrganizations.map(
@@ -285,6 +287,7 @@ const EditOrganizations = (props) => {
                     label="Your E-mail"
                     variant="outlined"
                     fullWidth
+                    required
                     onChange={({ target }) =>
                       setNewOrganizationEmail(target.value)
                     }

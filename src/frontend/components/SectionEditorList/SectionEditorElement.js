@@ -10,7 +10,9 @@ import { API_CHANGE_SECTION_EDITOR_SECTION } from "../../pages/api/api";
 import { useSelector } from "react-redux";
 
 const SectionEditorElement = (props) => {
-  const [newSection, setNewSection] = useState();
+  const [newSection, setNewSection] = useState(
+    props.section ? props.section.idSection : "1"
+  );
   const token = useSelector((state) => state.auth.token);
   const [show, setShow] = useState(false);
   const router = useRouter();
@@ -22,7 +24,7 @@ const SectionEditorElement = (props) => {
 
   const handleClose = () => {
     setShow(false);
-    router.reload(window.location.pathname)
+    router.reload(window.location.pathname);
   };
 
   const submitHandler = (event) => {
@@ -61,7 +63,6 @@ const SectionEditorElement = (props) => {
         console.error("Error occurred during PUT request:", err);
       });
   };
-
 
   return (
     <tr>
@@ -114,7 +115,7 @@ const SectionEditorElement = (props) => {
         </Box>
       </td>
       <td>
-        <Button variant="success me-5" onClick={submitHandler} >
+        <Button variant="success me-5" onClick={submitHandler}>
           Submit
         </Button>
       </td>

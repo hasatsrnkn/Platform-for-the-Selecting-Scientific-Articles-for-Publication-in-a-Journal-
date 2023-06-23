@@ -1,6 +1,7 @@
 const Reviewer = require("../models/UserModels/reviewerModel");
 const Grade = require("../models/gradeModel");
 const { validationResult } = require("express-validator");
+const PaperItem = require("../models/PaperModels/paper-item-Model");
 
 exports.putGrade = (req, res, next) => {
   const userId = req.params.userId;
@@ -72,6 +73,49 @@ exports.getGrade = (req, res, next) => {
         throw error;
       }
       res.status(200).json({ message: "User fetched.", grade: grade });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.putBidLevel = (req, res, next) => {
+  const userId = req.params.userId;
+  const bidLevel = req.body.bidLevel;
+  const paperId = req.body.paperId;
+
+  PaperItem.findOne({ where: { userIdUser: userId, paperIdPaper: paperId } })
+    .then((paperItem) => {
+      if (!paperItem) {
+        PaperItem.create({
+          reviewed: false,
+          assigned: false,
+          bidLevel: bidLevel,
+          userIdUser: userId,
+          paperIdPaper: paperId,
+        });
+      } else {
+        paperItem.update({ bidLevel: bidLevel });
+      }
+      res.status(200).json({ message: "Bid Level updated" });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getPaperItems = (req, res, next) => {
+  const userId = req.params.userId;
+
+  PaperItem.findAll({ where: { userIdUser: userId } })
+    .then((paperItems) => {
+      res.status(200).json({ paperItems: paperItems });
     })
     .catch((err) => {
       if (!err.statusCode) {

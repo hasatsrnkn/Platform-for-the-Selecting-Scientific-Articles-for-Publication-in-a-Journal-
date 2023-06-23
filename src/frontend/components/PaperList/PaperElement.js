@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Button, Modal, Row, Popover, OverlayTrigger } from "react-bootstrap";
+import { Button, Col, Row, Popover, OverlayTrigger } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
@@ -56,15 +56,15 @@ const PaperElement = (props) => {
       <td>{props.authors}</td>
       <td>{props.doi}</td>
       <td>{props.pmid}</td>
-      <td>{props.idJournal}</td>
-      <td>{props.idJournalIssue}</td>
+      <td>{props.journalName}</td>
+      <td>{props.journalIssue}</td>
       <td>
         <OverlayTrigger
           trigger="click"
-          key="right"
-          placement="right"
+          key="left"
+          placement="left"
           overlay={
-            <Popover id={`popover-positioned-right`}>
+            <Popover id={`popover-positioned-left`}>
               <Popover.Header as="h3">{`Abstract`}</Popover.Header>
               <Popover.Body>
                 <strong>{props.abstract}</strong>
@@ -80,7 +80,7 @@ const PaperElement = (props) => {
       </td>
       <td>
         <Button variant="success" onClick={downloadHandler}>
-          Download
+          Download Paper
         </Button>
       </td>
     </tr>

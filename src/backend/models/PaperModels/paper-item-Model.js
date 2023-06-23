@@ -7,8 +7,24 @@ const PaperItem = sequelize.define("paperItem", {
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
+  },
+
+  reviewed: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+  },
+
+  assigned: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+  },
+
+  bidLevel: {
+    type: Sequelize.INTEGER, 
+    defaultValue: 0,
   }
 
+  
 });
 
 module.exports = PaperItem;
