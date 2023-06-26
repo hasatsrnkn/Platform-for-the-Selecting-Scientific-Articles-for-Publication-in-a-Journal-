@@ -18,6 +18,8 @@ const API_POST_NEW_ORGANIZATION = `${BASE_URL}user/post-new-organization`;
 const API_UPDATE_EMAILS = `${BASE_URL}user/change-organization-emails`;
 const API_DELETE_ACCOUNT = `${BASE_URL}user/delete-account/`;
 const API_GET_ALL_SECTIONS = `${BASE_URL}user/get-all-sections`;
+const API_MAKE_FULL_REVIEW = `${BASE_URL}user/make-full-review`;
+const API_GET_ONE_REVIEW = `${BASE_URL}user/get-one-review/`;
 
 //SELECTION ASSISTANT EDITOR
 const API_ALL_SECTION_EDITORS = `${BASE_URL}sae/all-section-editors`;
@@ -41,6 +43,7 @@ const API_REVIEWER_GRADE = `${BASE_URL}reviewer/put-grade/`;
 const API_REVIEWER_GET_GRADES = `${BASE_URL}reviewer/get-grade/`;
 const API_REVIEWER_PUT_BID_LEVEL = `${BASE_URL}reviewer/put-bid-level/`;
 const API_REVIEWER_GET_ALL_PAPERITEMS =`${BASE_URL}reviewer/get-paper-items/`;
+const API_REVIEWER_GET_ASSIGNED_PAPERS = `${BASE_URL}reviewer/get-assigned-papers/`;
 
 module.exports = {
   API_SIGN_UP,
@@ -73,5 +76,8 @@ module.exports = {
   API_GET_ALL_REVIEWERS,
   API_REVIEWER_PUT_BID_LEVEL,
   API_REVIEWER_GET_ALL_PAPERITEMS,
-  API_ASSIGN_PAPERS_BY_ALGO
+  API_ASSIGN_PAPERS_BY_ALGO,
+  API_REVIEWER_GET_ASSIGNED_PAPERS,
+  API_MAKE_FULL_REVIEW,
+  API_GET_ONE_REVIEW,
 };

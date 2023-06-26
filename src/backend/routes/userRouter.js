@@ -13,6 +13,7 @@ router.post("/post-new-organization",isAuth, userController.postNewOrganization)
 router.put("/change-organization-emails", isAuth, userController.changeOrganizationEmails);
 router.post("/delete-account/:userId", isAuth, userController.deleteAccount);
 router.get("/get-all-sections", isAuth, userController.getAllSections);
-
+router.put("/make-full-review", isAuth, userController.makeFullReview);
+router.get("/get-one-review/:userId/:paperId", isAuth, userController.getReview);
 
 module.exports = router;
