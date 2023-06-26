@@ -8,6 +8,8 @@ const Grade = require("../models/gradeModel");
 const Section = require("../models/sectionModel");
 const Organization = require("../models/OrganizationModels/organizationModel");
 const OrganizationItem = require("../models/OrganizationModels/organization-item-Model");
+const Review = require("../models/reviewModel");
+const PaperItem = require("../models/PaperModels/paper-item-Model");
 
 exports.getProfile = (req, res, next) => {
   const userId = req.params.userId;
@@ -38,7 +40,6 @@ exports.getProfile = (req, res, next) => {
       next(err);
     });
 };
- 
 
 exports.deleteAccount = (req, res, next) => {
   const userId = req.params.userId;
@@ -56,7 +57,6 @@ exports.deleteAccount = (req, res, next) => {
       res.status(200).json({
         message: "User deleted.",
         result: result,
-       
       });
     })
     .catch((err) => console.log(err));
@@ -79,7 +79,6 @@ exports.getAllOrganizations = (req, res, next) => {
     });
 };
 
-
 exports.getAllSections = (req, res, next) => {
   console.log("getting all organizatins");
   Section.findAll()
@@ -96,7 +95,6 @@ exports.getAllSections = (req, res, next) => {
       next(err);
     });
 };
-
 
 exports.getAllUsers = (req, res, next) => {
   User.findAll()
@@ -115,7 +113,6 @@ exports.getAllUsers = (req, res, next) => {
       next(err);
     });
 };
-
 
 exports.changeOrganizationEmails = (req, res, next) => {
   const userId = req.body.userId;
@@ -212,7 +209,6 @@ exports.postNewOrganization = (req, res, next) => {
   });
 };
 
-
 exports.getSectionId = (req, res, next) => {
   const userId = req.params.userId;
   console.log("userId is " + userId);
@@ -247,6 +243,96 @@ exports.getSectionId = (req, res, next) => {
     });
 };
 
+exports.makeFullReview = (req, res, next) => {
+  const userId = req.body.userId;
+  const paperId = req.body.paperId;
+  const topicImportance = req.body.topicImportance;
+  const include = req.body.include;
+  const scientificPracticalImpact = req.body.scientificPracticalImpact;
+  const scientificContent = req.body.scientificContent;
+  const originality = req.body.originality;
+  const literature = req.body.literature;
+  const presentation = req.body.presentation;
+  const comment = req.body.comment;
+
+  Review.findOne({ where: { idUser: userId, idPaper: paperId } })
+    .then((review) => {
+      if (!review) {
+        Review.create({
+          topicImportance: topicImportance,
+          include: include,
+          scientificContent: scientificContent,
+          scientificPracticalImpact: scientificPracticalImpact,
+          originality: originality,
+          literature: literature,
+          presentation: presentation,
+          comment: comment,
+          fullReview: true,
+          idPaper: paperId,
+          idUser: userId,
+        }).then((createdPaper) => {
+          PaperItem.findOne({
+            where: { userIdUser: userId, paperIdPaper: paperId },
+          }).then((paperItem) => {
+            if (!paperItem) {
+              PaperItem.create({
+                userIdUser: userId,
+                paperIdPaper: paperId,
+                assigned: true,
+                reviewed: true,
+              });
+            } else {
+              paperItem.update({
+                reviewed: true,
+              });
+            }
+          });
+        });
+        res.status(200).json({ review: review });
+      } else {
+        review
+          .update({
+            topicImportance: topicImportance,
+            include: include,
+            scientificContent: scientificContent,
+            scientificPracticalImpact: scientificPracticalImpact,
+            originality: originality,
+            literature: literature,
+            presentation: presentation,
+            comment: comment,
+            fullReview: true,
+            idPaper: paperId,
+            idUser: userId,
+          })
+          .then((updatedReview) => {
+            res.status(200).json({ review: updatedReview });
+          });
+      }
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getReview = (req, res, next) => {
+  const userId = req.params.userId;
+  const paperId = req.params.paperId;
+
+  Review.findOne({ where: { idUser: userId, idPaper: paperId } })
+    .then((review) => {
+    
+      res.status(200).json({ review: review });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
 
 function getUserClass(userType) {
   switch (userType) {

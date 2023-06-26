@@ -252,6 +252,7 @@ exports.changeUserRole = (req, res, next) => {
 };
 
 exports.assignReviewersSection = async (req, res, next) => {
+  console.log("girdi");
   let reviewers = await createReviewers();
   let sections = await Section.findAll();
   let sectionAverages = await computeSectionAverages(sections, reviewers);
@@ -322,9 +323,6 @@ async function removeGrade(currentSection, reviewers) {
     reviewer.grades[currentSection - 1] = null; // Or assign any other appropriate value
   });
 
-  // Update the database or perform any other necessary actions with the updated reviewers array
-  // ...
-
   return reviewers;
 }
 
@@ -358,9 +356,6 @@ async function removeAssignedReviewers(assignedReviewers, reviewers) {
   reviewers = reviewers.filter(
     (reviewer) => !assignedReviewersIds.includes(reviewer.idUser)
   );
-
-  // Update the database or perform any other necessary actions with the updated reviewers array
-  // ...
 
   return reviewers;
 }
