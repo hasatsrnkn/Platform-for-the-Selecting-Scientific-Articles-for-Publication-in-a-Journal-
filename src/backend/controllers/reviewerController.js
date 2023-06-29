@@ -126,30 +126,3 @@ exports.getPaperItems = (req, res, next) => {
     });
 };
 
-exports.getAssignedPapers = (req, res, next) => {
-  const userId = req.params.userId;
-  const papers = [];
-  
-  PaperItem.findAll({ where: { userIdUser: userId, assigned: true } })
-    .then((paperItems) => {
-      
-      const paperPromises = paperItems.map((paperItem) => {
-        return Paper.findOne({ where: { idPaper: paperItem.paperIdPaper } });
-      });
-      
-      Promise.all(paperPromises)
-        .then((result) => {
-          papers.push(...result);
-          res.status(200).json({ paperItems: paperItems, papers: papers });
-        })
-        .catch((err) => {
-          throw err;
-        });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
-};

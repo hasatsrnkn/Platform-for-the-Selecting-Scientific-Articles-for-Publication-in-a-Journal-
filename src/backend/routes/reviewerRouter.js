@@ -8,5 +8,4 @@ router.put("/put-grade/:userId", isAuth, reviewerController.putGrade);
 router.put("/put-bid-level/:userId", isAuth, reviewerController.putBidLevel);
 router.get("/get-grade/:userId", isAuth, reviewerController.getGrade);
 router.get("/get-paper-items/:userId", isAuth, reviewerController.getPaperItems);
-router.get("/get-assigned-papers/:userId", isAuth, reviewerController.getAssignedPapers);
 module.exports = router;

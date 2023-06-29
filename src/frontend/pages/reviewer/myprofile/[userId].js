@@ -122,6 +122,16 @@ const ReviewerProfilePage = (props) => {
                 See Assigned Papers
               </Button>
             </Link>
+            <Link
+              className=""
+              href={`/${userType}/bestpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="info">
+                See Best Papers
+              </Button>
+              </Link>
           </ButtonGroup>
         </Row>
       </Col>

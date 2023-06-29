@@ -8,6 +8,7 @@ exports.sendEmail = function(req, res){
         user: 'admreviewplatform@gmail.com',
         pass: 'jntrenqiiloxsiqa',
     },
+    from:'admreviewplatform@gmail.com',
     });
 
 

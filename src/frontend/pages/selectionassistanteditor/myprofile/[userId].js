@@ -1,6 +1,6 @@
 import ProfileInfo from "../../../components/Profile/ProfileInfo";
 import NavbarMenu from "../../../components/UI/NavbarMenu";
-import { API_ASSIGN_REVIEWERS_BY_ALGO, API_PROFILE } from "../../api/api";
+import { API_ASSIGN_PAPERS_TO_EDITORAL, API_ASSIGN_REVIEWERS_BY_ALGO, API_PROFILE, API_SEND_REMINDER } from "../../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -15,11 +15,19 @@ const SelectionAssistantEditorProfilePage = (props) => {
   const router = useRouter();
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
   const [show, setShow] = useState(false);
+  const [show2,setShow2] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     router.reload(window.location.pathname);
   };
+
+  const handleClose2 = () => {
+    setShow2(false);
+    router.reload(window.location.pathname);
+  };
+
+
   useEffect(() => {
     const fetchProfileData = async () => {
       console.log(API_PROFILE + userID);
@@ -85,6 +93,39 @@ const SelectionAssistantEditorProfilePage = (props) => {
     return <div>Not authenticated</div>; // Show a loading indicator while fetching user data
   }
 
+  const assignPapersToEditoral = (event) => {
+    event.preventDefault();
+    fetch(API_ASSIGN_PAPERS_TO_EDITORAL, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = "Authentication failed!";
+            if (data && data.error && data.error.message) {
+              errorMessage = data.message;
+            }
+            alert(data.message);
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        // Handle the successful response
+        setShow(true);
+        console.log("PUT request was successful!");
+      })
+      .catch((err) => {
+        console.error("Error occurred during PUT request:", err);
+      });
+  }
+
   const assignAutoHandler = (event) => {
     console.log("click");
     event.preventDefault();
@@ -118,6 +159,42 @@ const SelectionAssistantEditorProfilePage = (props) => {
         console.error("Error occurred during PUT request:", err);
       });
   };
+
+  const sendReminderHandler = (event) => {
+    event.preventDefault();
+   
+    fetch(API_SEND_REMINDER, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = "Authentication failed!";
+            setSuccessMessage("");
+            setErrorMessage(data.message);
+            if (data && data.error && data.error.message) {
+              errorMessage = data.message;
+            }
+
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        // Handle the successful response
+        setShow2(true);
+        console.log("POST request was successful!", data);
+      })
+      .catch((err) => {
+        console.error("Error occurred during POST request:", err);
+      });
+  }
 
   return (
     <div className="overflow-hidden">
@@ -190,6 +267,32 @@ const SelectionAssistantEditorProfilePage = (props) => {
                 Assign Papers to Reviewers
               </Button>
             </Link>
+            <Button
+              size="lg"
+              className="mt-4"
+              variant="primary"
+              onClick={assignPapersToEditoral}
+            >
+              Assign Papers to Editoral Board
+            </Button>
+            <Button
+              size="lg"
+              className="mt-4"
+              variant="info"
+              onClick={sendReminderHandler}
+            >
+              Send Reminders
+            </Button>
+            <Link
+              className=""
+              href={`/${userType}/bestpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="primary">
+                See Best Papers
+              </Button>
+            </Link>
           </ButtonGroup>
         </Row>
       </Col>
@@ -200,7 +303,7 @@ const SelectionAssistantEditorProfilePage = (props) => {
         </Modal.Header>
         <Modal.Body>
           <h5>
-            <Row>You successfully assigned sections to reviewers!</Row>
+            <Row>You successfully assigned</Row>
           </h5>
         </Modal.Body>
         <Modal.Footer>
@@ -209,6 +312,23 @@ const SelectionAssistantEditorProfilePage = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Modal show={show2} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>
+            <Row>You successfully sent reminders</Row>
+          </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose2}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </div>
   );
 };

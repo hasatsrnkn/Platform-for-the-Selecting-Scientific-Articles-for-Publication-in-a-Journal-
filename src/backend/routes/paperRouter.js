@@ -12,5 +12,7 @@ router.get(
   paperController.getSectionPapers
 );
 router.post("/post-paper", isAuth, paperController.postAddPaper);
+router.get("/sort-best-papers", isAuth, paperController.sortBestPapers);
+router.get("/get-sections-best-papers/:userId", isAuth, paperController.getSectionsBestPapers);
 
 module.exports = router;

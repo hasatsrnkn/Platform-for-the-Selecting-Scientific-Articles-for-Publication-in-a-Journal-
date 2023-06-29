@@ -12,6 +12,8 @@ const Reviewer = require("../models/UserModels/reviewerModel");
 const SectionEditor = require("../models/UserModels/sectionEditorModel");
 const SelectionAssistantEditor = require("../models/UserModels/selectionAssistantEditorModel");
 const VicePresident = require("../models/UserModels/vicePresidentModel");
+const Section = require("../models/sectionModel");
+const Review = require("../models/reviewModel");
 
 exports.postAddPaper = (req, res, next) => {
   console.log(req.file);
@@ -57,7 +59,7 @@ exports.postAddPaper = (req, res, next) => {
 
 exports.getPaper = (req, res, next) => {
   const paperId = req.params.paperId;
-  console.log("start of downloading paper" + paperId)
+  console.log("start of downloading paper" + paperId);
   Paper.findOne({ where: { idPaper: paperId } }).then((paper) => {
     const paperFilePath = paper.paperFilePath;
     fs.readFile(paperFilePath, (err, data) => {
@@ -71,7 +73,7 @@ exports.getPaper = (req, res, next) => {
 };
 
 exports.getAllPapers = (req, res, next) => {
-  Paper.findAll()
+  Paper.findAll({ include: [{ model: Section }] })
     .then((papers) => {
       if (!papers) {
         const error = new Error("No papers");
@@ -137,6 +139,121 @@ exports.getSectionPapers = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getSectionsBestPapers = async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const user = await User.findOne({ where: { idUser: userId } });
+    if (!user) {
+      const error = new Error("No users");
+      error.statusCode = 404;
+      throw error;
+    }
+    const currentUserType = getUserClass(user.role);
+    if (!currentUserType) {
+      const error = new Error("Invalid user type");
+      error.statusCode = 400;
+      throw error;
+    }
+    const foundUser = await currentUserType.findOne({
+      where: { idUser: userId },
+    });
+    if (!foundUser) {
+      const error = new Error("Invalid user type");
+      error.statusCode = 400;
+      throw error;
+    }
+    const idSection = foundUser.idSection;
+    const papers = await createSectionPapers(idSection);
+    if (papers.length > 0) {
+      const sortedPapers = await sortPapers(papers);
+      return res.status(200).json({ papers: sortedPapers });
+    }
+  } catch (error) {
+    // Handle any errors that occur during the process
+    next(error);
+  }
+};
+
+exports.sortBestPapers = async (req, res, next) => {
+  let papers = await createPapers();
+
+  if (papers.length > 0) {
+    papers = await sortPapers(papers);
+    return res.status(200).json({ papers: papers });
+  }
+};
+
+async function sortPapers(papers) {
+  papers.sort((a, b) => {
+    const currentAverageA = a.average;
+    const currentAverageB = b.average;
+    return currentAverageB - currentAverageA;
+  });
+  return papers;
+}
+
+async function createSectionPapers(idSection) {
+  const papers = [];
+  const allPapers = await Paper.findAll({ where: { idSection: idSection } });
+
+  for (const paper of allPapers) {
+    let reviewsOfThePaper = await Review.findAll({
+      where: { idPaper: paper.idPaper },
+    });
+    let count = 0;
+    let sum = 0;
+    for (const review of reviewsOfThePaper) {
+      if (review.fullReview) {
+        sum =
+          sum +
+          review.topicImportance +
+          review.include +
+          review.scientificPracticalImpact +
+          review.scientificContent +
+          review.originality +
+          review.literature +
+          review.presentation;
+      } else {
+        sum = sum + review.include;
+      }
+      count++;
+    }
+    papers.push({ paper: paper, average: sum / count });
+  }
+  return papers;
+}
+
+async function createPapers() {
+  const papers = [];
+  const allPapers = await Paper.findAll();
+
+  for (const paper of allPapers) {
+    let reviewsOfThePaper = await Review.findAll({
+      where: { idPaper: paper.idPaper },
+    });
+    let count = 0;
+    let sum = 0;
+    for (const review of reviewsOfThePaper) {
+      if (review.fullReview) {
+        sum =
+          sum +
+          review.topicImportance +
+          review.include +
+          review.scientificPracticalImpact +
+          review.scientificContent +
+          review.originality +
+          review.literature +
+          review.presentation;
+      } else {
+        sum = sum + review.include;
+      }
+      count++;
+    }
+    papers.push({ paper: paper, average: sum / count });
+  }
+  return papers;
+}
 
 function getUserClass(userType) {
   switch (userType) {

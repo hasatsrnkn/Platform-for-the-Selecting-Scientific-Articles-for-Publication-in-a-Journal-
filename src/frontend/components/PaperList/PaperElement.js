@@ -64,7 +64,7 @@ const PaperElement = (props) => {
           key="left"
           placement="left"
           overlay={
-            <Popover id={`popover-positioned-left`}>
+            <Popover id={`popover-positioned-left`} >
               <Popover.Header as="h3">{`Abstract`}</Popover.Header>
               <Popover.Body>
                 <strong>{props.abstract}</strong>
@@ -76,7 +76,9 @@ const PaperElement = (props) => {
         </OverlayTrigger>
       </td>
       <td>
+      <Link href={`/papers/reviews/${props.id}`} passHref legacyBehavior>
         <Button>See Reviews</Button>
+        </Link>
       </td>
       <td>
         <Button variant="success" onClick={downloadHandler}>

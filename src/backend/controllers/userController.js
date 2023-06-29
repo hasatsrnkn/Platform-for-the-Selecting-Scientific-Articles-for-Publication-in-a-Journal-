@@ -10,6 +10,7 @@ const Organization = require("../models/OrganizationModels/organizationModel");
 const OrganizationItem = require("../models/OrganizationModels/organization-item-Model");
 const Review = require("../models/reviewModel");
 const PaperItem = require("../models/PaperModels/paper-item-Model");
+const Paper = require("../models/PaperModels/paperModel");
 
 exports.getProfile = (req, res, next) => {
   const userId = req.params.userId;
@@ -211,7 +212,6 @@ exports.postNewOrganization = (req, res, next) => {
 
 exports.getSectionId = (req, res, next) => {
   const userId = req.params.userId;
-  console.log("userId is " + userId);
   User.findOne({ where: { idUser: userId } })
     .then((user) => {
       if (!user) {
@@ -317,14 +317,116 @@ exports.makeFullReview = (req, res, next) => {
     });
 };
 
+exports.makeLightReview = (req, res, next) => {
+  const userId = req.body.userId;
+  const paperId = req.body.paperId;
+  const include = req.body.include;
+  const comment = req.body.comment;
+
+  Review.findOne({ where: { idUser: userId, idPaper: paperId } })
+    .then((review) => {
+      if (!review) {
+        Review.create({
+          include: include,
+          comment: comment,
+          fullReview: false,
+          idPaper: paperId,
+          idUser: userId,
+        }).then((createdPaper) => {
+          PaperItem.findOne({
+            where: { userIdUser: userId, paperIdPaper: paperId },
+          }).then((paperItem) => {
+            if (!paperItem) {
+              PaperItem.create({
+                userIdUser: userId,
+                paperIdPaper: paperId,
+                assigned: true,
+                reviewed: true,
+              });
+            } else {
+              paperItem.update({
+                reviewed: true,
+              });
+            }
+          });
+        });
+        res.status(200).json({ review: review });
+      } else {
+        review
+          .update({
+            include: include,
+            comment: comment,
+            fullReview: false,
+            idPaper: paperId,
+            idUser: userId,
+          })
+          .then((updatedReview) => {
+            res.status(200).json({ review: updatedReview });
+          });
+      }
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 exports.getReview = (req, res, next) => {
   const userId = req.params.userId;
   const paperId = req.params.paperId;
 
   Review.findOne({ where: { idUser: userId, idPaper: paperId } })
     .then((review) => {
-    
       res.status(200).json({ review: review });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getAllReviewsOfAPaper = (req, res, next) => {
+  const paperId = req.params.paperId;
+  Review.findAll({
+    where: { idPaper: paperId },
+    include: [{ model: User }, { model: Paper }],
+  })
+    .then((reviews) => {
+      if (!reviews) {
+        return res.status(404).json({ message: "No review found!" });
+      }
+      res.status(200).json({ reviews: reviews });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getAssignedPapers = (req, res, next) => {
+  const userId = req.params.userId;
+  const papers = [];
+
+  PaperItem.findAll({ where: { userIdUser: userId, assigned: true } })
+    .then((paperItems) => {
+      const paperPromises = paperItems.map((paperItem) => {
+        return Paper.findOne({ where: { idPaper: paperItem.paperIdPaper } });
+      });
+
+      Promise.all(paperPromises)
+        .then((result) => {
+          papers.push(...result);
+          res.status(200).json({ paperItems: paperItems, papers: papers });
+        })
+        .catch((err) => {
+          throw err;
+        });
     })
     .catch((err) => {
       if (!err.statusCode) {

@@ -145,10 +145,10 @@ const FullReviewForm = (props) => {
   }, [token, tokenLoaded, userID, props.paperId] );
 
   return (
-    <div className="d-flex justify-content-center align-items-center p-5">
+    <div className="d-flex justify-content-center align-items-center p-4">
       <Container
         style={{
-          width: "50vw",
+          width: "45vw",
         }}
       >
         <Col className="mt-2 d-flex justify-content-center">
@@ -166,7 +166,7 @@ const FullReviewForm = (props) => {
                     event.preventDefault();
                     setTopicImportance(+event.target.value);
                   }}
-                  defaultValue={topicImportance}
+                  value={topicImportance}
                 >
                   <option value="10">10</option>
                   <option value="9">9</option>
