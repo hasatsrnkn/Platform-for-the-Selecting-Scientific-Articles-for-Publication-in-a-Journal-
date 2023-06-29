@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Table } from "react-bootstrap";
-import { API_REVIEWER_GET_ASSIGNED_PAPERS } from "../../pages/api/api";
+import { API_USER_GET_ASSIGNED_PAPERS } from "../../pages/api/api";
 import ReviewerAssignedPaperElement from "./ReviewerAssignedPaperElement";
 const ReviewerAssignedPapersList = (props) => {
   const token = useSelector((state) => state.auth.token);
@@ -22,7 +22,7 @@ const ReviewerAssignedPapersList = (props) => {
 
       try {
         const response = await fetch(
-          API_REVIEWER_GET_ASSIGNED_PAPERS + userID,
+          API_USER_GET_ASSIGNED_PAPERS + userID,
           {
             method: "GET",
             headers: {

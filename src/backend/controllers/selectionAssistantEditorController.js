@@ -1,4 +1,7 @@
 const ChiefEditor = require("../models/UserModels/chiefEditorModel");
+
+const nodemailer = require("nodemailer");
+
 const Reviewer = require("../models/UserModels/reviewerModel");
 const SectionEditor = require("../models/UserModels/sectionEditorModel");
 const SelectionAssistantEditor = require("../models/UserModels/selectionAssistantEditorModel");
@@ -6,8 +9,7 @@ const User = require("../models/UserModels/userModel");
 const VicePresident = require("../models/UserModels/vicePresidentModel");
 const Grade = require("../models/gradeModel");
 const Section = require("../models/sectionModel");
-const Organization = require("../models/OrganizationModels/organizationModel");
-const OrganizationItem = require("../models/OrganizationModels/organization-item-Model");
+
 const Paper = require("../models/PaperModels/paperModel");
 const PaperItem = require("../models/PaperModels/paper-item-Model");
 
@@ -290,7 +292,8 @@ exports.assignPapersToReviewers = async (req, res, next) => {
   let papers = await Paper.findAll({ where: { idSection: sectionId } });
   let paperBidAverages = await computePaperBidAverages(papers, reviewers);
   let count = 1;
-  let paperLength = papers.length;
+  //const k = await determineKValue(papers, reviewers);
+  
   for (const paper of papers) {
     const currentPaperId = getPaperWithLowestBidAverage(paperBidAverages);
     const orderedReviewers = orderReviewersByBidLevel(
@@ -299,7 +302,6 @@ exports.assignPapersToReviewers = async (req, res, next) => {
       paperBidAverages
     );
     let k = 2;
-
     const assignedReviewers = orderedReviewers.slice(0, k);
     await updatePapersWithReviewers(currentPaperId, assignedReviewers);
     reviewers = await removeAssignedReviewersForPaperAssignment(
@@ -316,7 +318,168 @@ exports.assignPapersToReviewers = async (req, res, next) => {
     .json({ message: "Reviewers assigned to sections successfully." });
 };
 
+exports.assignPapersToSectionEditorsChiefEditorsVicePresident = async (
+  req,
+  res,
+  next
+) => {
+  let sections = await Section.findAll();
+
+  for (const section of sections) {
+    //get papers of the section
+    let papers = await Paper.findAll({
+      where: { idSection: section.idSection },
+    });
+
+    //assign papers to section editors of the section
+    await assignPapersToSectionEditors(papers, section);
+
+    //assign papers to chief editor of the section
+    await assignPapersToChiefEditor(papers, section);
+
+    //assign papers to vicePresident
+    await assignPapersToVicePresident(papers, section);
+  }
+  res
+    .status(200)
+    .json({ message: "Editoral Board assigned to sections successfully." });
+};
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "admreviewplatform@gmail.com",
+    pass: "jntrenqiiloxsiqa",
+  },
+  from:'admreviewplatform@gmail.com',
+});
+
+
+exports.sendReminder = (req, res, next) => {
+  const remindedUsers = [];
+  PaperItem.findAll({ where: { assigned: true, reviewed: false } })
+    .then((paperItems) => {
+      for (const paperItem of paperItems) {
+        User.findOne({ where: { idUser: paperItem.userIdUser } }).then(
+          (user) => {
+            if (user && !remindedUsers.some((remindedUser) => remindedUser.idUser === user.idUser)) {
+              transporter.sendMail({
+                to: user.email,
+                from: "Review Platform",
+                subject: "Reminder",
+                html: `
+            <p>Hello, we kindly remind you to review your papers!</p>
+          `,
+              });
+              remindedUsers.push(user);
+            }
+          }
+        );
+      }
+      return res.status(201).json({ message: "Email is sent for remind!" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 //Helper Functions
+
+async function determineKValue(papers, reviewers) {
+  let minValue= reviewers.length;
+  for(const paper of papers) {
+    const paperItems = await PaperItem.findAll({where: {paperIdPaper: paper.idPaper}});
+    let value = 0;
+    for( const paperItem of paperItems) {
+      if(paperItem.bidLevel != -2 ) {
+        value++;
+      }
+    }
+    if( value < minValue) {
+      minValue = value;
+    }
+  }
+  return minValue;
+}
+
+async function assignPapersToVicePresident(papers, section) {
+  let vicePresident = await User.findOne({ where: { role: "vicepresident" } });
+  if (vicePresident && papers) {
+    for (const paper of papers) {
+      PaperItem.findOne({
+        where: {
+          userIdUser: vicePresident.idUser,
+          paperIdPaper: paper.idPaper,
+        },
+      }).then((paperItem) => {
+        if (!paperItem) {
+          PaperItem.create({
+            userIdUser: vicePresident.idUser,
+            paperIdPaper: paper.idPaper,
+            assigned: true,
+            reviewed: false,
+          });
+        } else {
+          return;
+        }
+      });
+    }
+  }
+}
+
+async function assignPapersToChiefEditor(papers, section) {
+  let chiefEditor = await ChiefEditor.findOne({
+    where: { idUser: section.idChiefEditor },
+  });
+  if (chiefEditor && papers) {
+    for (const paper of papers) {
+      PaperItem.findOne({
+        where: { userIdUser: chiefEditor.idUser, paperIdPaper: paper.idPaper },
+      }).then((paperItem) => {
+        if (!paperItem) {
+          PaperItem.create({
+            userIdUser: chiefEditor.idUser,
+            paperIdPaper: paper.idPaper,
+            assigned: true,
+            reviewed: false,
+          });
+        } else {
+          return;
+        }
+      });
+    }
+  }
+}
+
+async function assignPapersToSectionEditors(papers, section) {
+  let sectionEditors = await SectionEditor.findAll({
+    where: { idSection: section.idSection },
+  });
+  if (sectionEditors && papers) {
+    for (const paper of papers) {
+      await assignPaperToSectionEditor(paper, sectionEditors);
+    }
+  }
+}
+
+async function assignPaperToSectionEditor(paper, sectionEditors) {
+  for (const sectionEditor of sectionEditors) {
+    PaperItem.findOne({
+      where: { userIdUser: sectionEditor.idUser, paperIdPaper: paper.idPaper },
+    }).then((paperItem) => {
+      if (!paperItem) {
+        PaperItem.create({
+          userIdUser: sectionEditor.idUser,
+          paperIdPaper: paper.idPaper,
+          assigned: true,
+          reviewed: false,
+        });
+      } else {
+        return;
+      }
+    });
+  }
+}
 
 async function removeGrade(currentSection, reviewers) {
   reviewers.forEach((reviewer) => {

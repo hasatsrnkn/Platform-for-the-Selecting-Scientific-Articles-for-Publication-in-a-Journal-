@@ -161,7 +161,9 @@ const ReviewerPaperElement = (props) => {
         </OverlayTrigger>
       </td>
       <td>
+      <Link href={`/papers/reviews/${props.id}`} passHref legacyBehavior>
         <Button>See Reviews</Button>
+        </Link>
       </td>
       <td>
         <Button variant="success" onClick={downloadHandler}>

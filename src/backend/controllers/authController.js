@@ -178,7 +178,6 @@ exports.postReset = (req, res, next) => {
       console.log(err);
     }
     const token = buffer.toString("hex");
-    console.log(token);
     User.findOne({ where: { email: req.body.email } })
       .then((user) => {
         if (!user) {
@@ -189,7 +188,6 @@ exports.postReset = (req, res, next) => {
           resetToken: token,
           resetTokenExpiration: Date.now() + 3600000,
         });
-        console.log("test");
         transporter.sendMail({
           to: req.body.email,
           from: "Review Platform",
@@ -215,6 +213,7 @@ const transporter = nodemailer.createTransport({
     user: "admreviewplatform@gmail.com",
     pass: "jntrenqiiloxsiqa",
   },
+  from:'admreviewplatform@gmail.com',
 });
 
 exports.getNewPassword = (req, res, next) => {

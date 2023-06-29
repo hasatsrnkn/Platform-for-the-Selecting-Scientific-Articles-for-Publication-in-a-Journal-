@@ -4,7 +4,7 @@ import { API_PROFILE } from "../../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Row, Col } from "react-bootstrap";
+import { Button, Row, Col, ButtonGroup } from "react-bootstrap";
 import Link from "next/link";
 
 const SectionEditorProfilePage = (props) => {
@@ -54,7 +54,6 @@ const SectionEditorProfilePage = (props) => {
           id: data.user.idUser,
           organizations: data.user.organizations,
           organizationItems: data.organizationItems,
-          
         });
       } catch (err) {
         alert(err.message);
@@ -83,8 +82,8 @@ const SectionEditorProfilePage = (props) => {
   return (
     <div className="overflow-hidden ">
       <NavbarMenu></NavbarMenu>
-      
-        <Row className="d-flex justify-content-center ">
+
+      <Row className="d-flex justify-content-center mt-2">
         <Col className="d-flex  justify-content-center">
           <ProfileInfo
             name={user.name}
@@ -94,20 +93,47 @@ const SectionEditorProfilePage = (props) => {
             id={user.id}
             username={user.username}
             organizations={user.organizations}
-            organizationItems= {user.organizationItems}
+            organizationItems={user.organizationItems}
             isAuth={true}
-
           ></ProfileInfo>
-          </Col>
-        </Row>
-      
+        </Col>
+      </Row>
+
       <Col className="d-flex align-items-center justify-content-center">
         <Row>
-        <Link className=""  href={`/${userType}/uploadpapers/${userID}`} passHref legacyBehavior>
-            <Button size="lg" className="mt-4" variant="success">
-              Upload Papers
-            </Button>
-          </Link>
+          <ButtonGroup>
+            <Link
+              className=""
+              href={`/${userType}/uploadpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="info">
+                Upload Papers
+              </Button>
+            </Link>
+            <Link
+              className=""
+              href={`/${userType}/assignedpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="primary">
+                See Assigned Papers
+              </Button>
+              
+            </Link>
+            <Link
+              className=""
+              href={`/${userType}/bestpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="info">
+                See Best Papers
+              </Button>
+              </Link>
+          </ButtonGroup>
         </Row>
       </Col>
     </div>

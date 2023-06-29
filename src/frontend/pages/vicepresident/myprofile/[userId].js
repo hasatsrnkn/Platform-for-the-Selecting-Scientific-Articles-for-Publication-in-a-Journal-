@@ -94,13 +94,37 @@ const VicePresidentProfilePage = (props) => {
             id={user.id}
             username={user.username}
             organizations={user.organizations}
-            organizationItems= {user.organizationItems}
+            organizationItems={user.organizationItems}
             isAuth={true}
           ></ProfileInfo>
         </Col>
       </Row>
-
-   
+      <Col className="d-flex align-items-center justify-content-center">
+        <Row>
+          <ButtonGroup>
+            <Link
+              className=""
+              href={`/${userType}/assignedpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="primary">
+                See Assigned Papers
+              </Button>
+            </Link>
+            <Link
+              className=""
+              href={`/${userType}/bestpapers/${userID}`}
+              passHref
+              legacyBehavior
+            >
+              <Button size="lg" className="mt-4" variant="info">
+                See Best Papers
+              </Button>
+            </Link>
+          </ButtonGroup>
+        </Row>
+      </Col>
     </div>
   );
 };

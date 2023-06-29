@@ -288,6 +288,7 @@ const EditOrganizations = (props) => {
                     variant="outlined"
                     fullWidth
                     required
+            
                     onChange={({ target }) =>
                       setNewOrganizationEmail(target.value)
                     }
