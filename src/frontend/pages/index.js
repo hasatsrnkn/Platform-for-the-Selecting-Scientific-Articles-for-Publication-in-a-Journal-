@@ -2,8 +2,8 @@ import SignInForm from "../components/MainPage/SignInForm";
 import bg from "../assets/mainmenubg.jpg";
 import { Col, Row, Container } from "react-bootstrap";
 import SignUpForm from "../components/MainPage/SignUpForm";
+import Footer from "../components/Footer/Footer";
 const HomePage = () => {
-  
   return (
     <Col
       style={{
@@ -11,7 +11,9 @@ const HomePage = () => {
         height: "100vh",
       }}
     >
-      <h1 className="text-white text-center pt-5">Welcome to Review Platform</h1>
+      <h1 className="text-white text-center pt-5">
+        Welcome to Review Platform
+      </h1>
       <div
         className="d-flex justify-content-center align-items-center"
         style={{ height: "70vh" }}
@@ -37,6 +39,11 @@ const HomePage = () => {
           </Row>
         </div>
       </div>
+      <Row className="d-flex justify-content-center align-items-center fixed-bottom mb-4 ">
+        <Col className="d-flex justify-content-center align-items-center">
+          <Footer></Footer>
+        </Col>
+      </Row>
     </Col>
   );
 };

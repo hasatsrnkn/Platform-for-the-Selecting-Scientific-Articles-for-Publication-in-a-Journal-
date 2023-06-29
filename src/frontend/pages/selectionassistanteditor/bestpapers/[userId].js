@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import SectionBestPaperList from "../../../components/BestPapersList/SectionBestPaperList";
 
-const SelectionAssistantEditorPapersPage = (props) => {
+const SelectionAssistantEditorBestPapersPage = (props) => {
   const token = useSelector((state) => state.auth.token);
   const [papers, setPapers] = useState(null);
   const [page, setPage] = useState(1);
@@ -121,4 +121,4 @@ const SelectionAssistantEditorPapersPage = (props) => {
   );
 };
 
-export default SelectionAssistantEditorPapersPage;
+export default SelectionAssistantEditorBestPapersPage;

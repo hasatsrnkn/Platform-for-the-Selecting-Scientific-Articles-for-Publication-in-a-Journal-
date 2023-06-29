@@ -8,7 +8,7 @@ import PaperList from "../../../components/PaperList/PaperList";
 import { API_GET_SECTIONS_BEST_PAPERS, API_GET_SECTION_PAPERS } from "../../api/api";
 import BestPaperList from "../../../components/BestPapersList/BestPaperList";
 
-const SectionEditorPapersPage = (props) => {
+const ReviewerBestPapersPage = (props) => {
   const token = useSelector((state) => state.auth.token);
   const userID = useSelector((state) => state.auth.userID);
   const userType = useSelector((state) => state.auth.type);
@@ -72,4 +72,4 @@ const SectionEditorPapersPage = (props) => {
   );
 };
 
-export default SectionEditorPapersPage;
+export default ReviewerBestPapersPage;

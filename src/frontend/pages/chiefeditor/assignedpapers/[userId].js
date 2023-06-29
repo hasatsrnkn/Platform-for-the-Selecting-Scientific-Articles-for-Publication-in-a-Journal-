@@ -1,7 +1,7 @@
 import ReviewerAssignedPapersList from "../../../components/ReviewerPaperList/ReviewerAssignedPaperList";
 import NavbarMenu from "../../../components/UI/NavbarMenu";
 
-const ReviewerAssignedPapers = (props) => {
+const ChiefEditorAssignedPapers = (props) => {
 
     return(<div className="overflow-hidden">
         <NavbarMenu></NavbarMenu>
@@ -9,5 +9,5 @@ const ReviewerAssignedPapers = (props) => {
     </div>);
 }
 
-export default ReviewerAssignedPapers;
+export default ChiefEditorAssignedPapers;
 

@@ -1,10 +1,22 @@
 import ProfileInfo from "../../../components/Profile/ProfileInfo";
 import NavbarMenu from "../../../components/UI/NavbarMenu";
-import { API_ASSIGN_PAPERS_TO_EDITORAL, API_ASSIGN_REVIEWERS_BY_ALGO, API_PROFILE, API_SEND_REMINDER } from "../../api/api";
+import {
+  API_ASSIGN_PAPERS_TO_EDITORAL,
+  API_ASSIGN_REVIEWERS_BY_ALGO,
+  API_PROFILE,
+  API_SEND_REMINDER,
+} from "../../api/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Row, ButtonGroup, Col, Modal } from "react-bootstrap";
+import {
+  Button,
+  Row,
+  ButtonGroup,
+  Col,
+  Modal,
+  Container,
+} from "react-bootstrap";
 import Link from "next/link";
 
 const SelectionAssistantEditorProfilePage = (props) => {
@@ -15,7 +27,7 @@ const SelectionAssistantEditorProfilePage = (props) => {
   const router = useRouter();
   const [tokenLoaded, setTokenLoaded] = useState(false); // New state to track token retrieval
   const [show, setShow] = useState(false);
-  const [show2,setShow2] = useState(false);
+  const [show2, setShow2] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -26,7 +38,6 @@ const SelectionAssistantEditorProfilePage = (props) => {
     setShow2(false);
     router.reload(window.location.pathname);
   };
-
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -124,7 +135,7 @@ const SelectionAssistantEditorProfilePage = (props) => {
       .catch((err) => {
         console.error("Error occurred during PUT request:", err);
       });
-  }
+  };
 
   const assignAutoHandler = (event) => {
     console.log("click");
@@ -162,7 +173,7 @@ const SelectionAssistantEditorProfilePage = (props) => {
 
   const sendReminderHandler = (event) => {
     event.preventDefault();
-   
+
     fetch(API_SEND_REMINDER, {
       method: "POST",
       headers: {
@@ -194,7 +205,7 @@ const SelectionAssistantEditorProfilePage = (props) => {
       .catch((err) => {
         console.error("Error occurred during POST request:", err);
       });
-  }
+  };
 
   return (
     <div className="overflow-hidden">
@@ -215,87 +226,82 @@ const SelectionAssistantEditorProfilePage = (props) => {
           ></ProfileInfo>
         </Col>
       </Row>
-
-      <Col className="d-flex align-items-center justify-content-center">
-        <Row>
-          <ButtonGroup>
-            <Link
-              className=""
-              href="/selectionassistanteditor/userslist"
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4 " variant="info">
-                Go To Users List
+      <Row>
+        
+        <Col className="col-6 p-5">
+          <Container className="p-5 square border border-3 rounded-5">
+            <Row className=" ps-5 pe-5">
+              <Link
+                href="/selectionassistanteditor/userslist"
+                passHref
+                legacyBehavior
+              >
+                <Button className="" variant="primary">
+                  Go To Users List
+                </Button>
+              </Link>
+            </Row>
+            <Row className="mt-5 ps-5 pe-5">
+              <Button variant="primary" onClick={sendReminderHandler}>
+                Send Reminders
               </Button>
-            </Link>
-            <Link
-              className=""
-              href={`/${userType}/assignsectioneditors/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4" variant="primary">
-                Assign Section Editors
+            </Row>
+            <Row className="mt-5 ps-5 pe-5">
+              <Link
+                href={`/${userType}/bestpapers/${userID}`}
+                passHref
+                legacyBehavior
+              >
+                <Button variant="primary">See Best Papers</Button>
+              </Link>
+            </Row>
+            <Row className="mt-5 ps-5 pe-5">
+              <Button variant="primary" onClick={assignPapersToEditoral}>
+                Assign Papers to Editoral Board
               </Button>
-            </Link>
-            <Link
-              className=""
-              href={`/${userType}/assignchiefeditors/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4" variant="info">
-                Assign Chief Editors
+            </Row>
+            
+          </Container>
+        </Col>
+        <Col className="col-6 p-5">
+          <Container className="p-5 square border border-3 rounded-5">
+            <Row className=" ps-5 pe-5"> 
+              <Link
+                href={`/${userType}/assignsectioneditors/${userID}`}
+                passHref
+                legacyBehavior
+              >
+                <Button variant="primary">Assign Section Editors</Button>
+              </Link>
+            </Row>
+            <Row className="mt-5  ps-5 pe-5">
+              <Link
+                className=""
+                href={`/${userType}/assignchiefeditors/${userID}`}
+                passHref
+                legacyBehavior
+              >
+                <Button variant="primary">Assign Chief Editors</Button>
+              </Link>
+            </Row>
+            <Row className="mt-5  ps-5 pe-5">
+              <Button variant="primary" onClick={assignAutoHandler}>
+                Assign Sections to Reviewers
               </Button>
-            </Link>
-            <Button
-              size="lg"
-              className="mt-4"
-              variant="primary"
-              onClick={assignAutoHandler}
-            >
-              Assign Sections to Reviewers
-            </Button>
-            <Link
-              className=""
-              href={`/${userType}/assignreviewers/papers/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4" variant="info">
-                Assign Papers to Reviewers
-              </Button>
-            </Link>
-            <Button
-              size="lg"
-              className="mt-4"
-              variant="primary"
-              onClick={assignPapersToEditoral}
-            >
-              Assign Papers to Editoral Board
-            </Button>
-            <Button
-              size="lg"
-              className="mt-4"
-              variant="info"
-              onClick={sendReminderHandler}
-            >
-              Send Reminders
-            </Button>
-            <Link
-              className=""
-              href={`/${userType}/bestpapers/${userID}`}
-              passHref
-              legacyBehavior
-            >
-              <Button size="lg" className="mt-4" variant="primary">
-                See Best Papers
-              </Button>
-            </Link>
-          </ButtonGroup>
-        </Row>
-      </Col>
+            </Row>
+            <Row className="mt-5  ps-5 pe-5">
+              <Link
+                className=""
+                href={`/${userType}/assignreviewers/papers/${userID}`}
+                passHref
+                legacyBehavior
+              >
+                <Button variant="primary">Assign Papers to Reviewers</Button>
+              </Link>
+            </Row>
+          </Container>
+        </Col>
+      </Row>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -328,7 +334,6 @@ const SelectionAssistantEditorProfilePage = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 };

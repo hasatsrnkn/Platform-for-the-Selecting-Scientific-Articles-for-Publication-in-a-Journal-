@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import {  API_GET_SECTION_PAPERS } from "../../api/api";
 import ReviewerPaperList from "../../../components/ReviewerPaperList/ReviewerPaperList";
 
-const SectionEditorPapersPage = (props) => {
+const ReviewersPapersPage = (props) => {
   const token = useSelector((state) => state.auth.token);
   const userID = useSelector((state) => state.auth.userID);
   const userType = useSelector((state) => state.auth.type);
@@ -69,4 +69,4 @@ const SectionEditorPapersPage = (props) => {
   );
 };
 
-export default SectionEditorPapersPage;
+export default ReviewersPapersPage;

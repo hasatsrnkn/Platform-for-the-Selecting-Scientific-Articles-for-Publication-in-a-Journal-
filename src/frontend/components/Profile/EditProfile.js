@@ -3,14 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import {
-  Col,
-  Row,
-  Button,
-  Modal,
-  Form,
- 
-} from "react-bootstrap";
+import { Col, Row, Button, Modal, Form } from "react-bootstrap";
 import {
   API_PUT_NEW_PASSWORD,
   API_CHANGE_USER_INFO,
@@ -46,6 +39,8 @@ const EditProfile = (props) => {
     setShow(false);
     setErrorMessage("");
     setSuccessMessage("");
+    setCurrentPassword("");
+    setNewPassword("");
   };
 
   const newProfileInfoHandler = (event) => {
