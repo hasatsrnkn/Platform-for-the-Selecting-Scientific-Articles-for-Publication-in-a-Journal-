@@ -573,7 +573,7 @@ async function updatePapersWithReviewers(currentPaperId, assignedReviewers) {
           paperIdPaper: currentPaperId,
         });
       }
-      foundReviewer.assignment++;
+      reviewer.assignment++;
     })
   );
 }
