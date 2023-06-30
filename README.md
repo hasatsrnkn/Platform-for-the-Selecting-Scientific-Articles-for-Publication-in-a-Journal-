@@ -8,4 +8,6 @@ Run the frontend server: <br/>
 $ npm run dev <br/>
 Go to the link (something like localhost:3000), and you will see the main page.<br/>
 <br/>
-After deploying the website, you will need to add the selection assistant editor and sections manually.<br/>
+After deploying the website, you must manually add the selection assistant editor and sections.<br/>
+<br/>
+If you have any problems, or questions, or want to report bugs, please contact us: hasatserinkan@hotmail.com - hasat.serinkan@ug.bilkent.edu.tr - zhanna.tursunbekova@edu.esiee.fr
